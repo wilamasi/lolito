@@ -1,0 +1,4 @@
+# Copias de seguridad y datos personales: nunca al repositorio
+copia-*.json
+datos-locales.json
+*.lnk

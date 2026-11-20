@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Lolito</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect width='34' height='34' rx='9' fill='%23b4532a'/%3E%3Cpath d='M9 19v-3a8 8 0 0 1 16 0v3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Crect x='7' y='18' width='5' height='7' rx='2' fill='%23fff'/%3E%3Crect x='22' y='18' width='5' height='7' rx='2' fill='%23fff'/%3E%3C/svg%3E">
+<script>try { var t = localStorage.getItem('lolito.tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+[hidden] { display: none !important; }
+:root {
+  --bg: #efe7f0; --surface: #ffffff; --ink: #1f1a21; --muted: #6a5f6c; --line: #ddd1df;
+  --accent: #b4532a; --accent-ink: #ffffff;
+  --shift: #9b7fe0; --free: #8cc63f;
+  --ok: #1e7a3c; --warn: #a15c00; --danger: #b3261e;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-num: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17131a; --surface: #221c25; --ink: #f0e9f1; --muted: #a99dab; --line: #3a3140;
+    --accent: #f08a5d; --accent-ink: #2a1206; --shift: #b9a3ff; --free: #b6e36b;
+    --ok: #5fd38a; --warn: #ffb74d; --danger: #ff8a80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17131a; --surface: #221c25; --ink: #f0e9f1; --muted: #a99dab; --line: #3a3140;
+  --accent: #f08a5d; --accent-ink: #2a1206; --shift: #b9a3ff; --free: #b6e36b;
+  --ok: #5fd38a; --warn: #ffb74d; --danger: #ff8a80; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scrollbar-gutter: stable; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 20px 16px 48px; display: flex; flex-direction: column; gap: 20px; }
+h1, h2 { font-family: var(--f-display); margin: 0; }
+h2 { font-size: 18px; font-weight: 700; }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .09em; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.hint { color: var(--muted); font-size: 13px; margin: 0; }
+/* Frases con montos: letra de texto (más amigable que la monoespaciada), cifras alineadas */
+.sub { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sub b { color: var(--ink); font-weight: 600; }
+
+/* Gatito: en computadora fijo en la esquina; en celular al final de la página */
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 7px 12px; min-height: 36px; white-space: nowrap; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.chip { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 4px 10px; font-size: 12px; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.dot { width: 10px; height: 10px; border-radius: 3px; flex: none; background: var(--c); }
+.t-shift { --c: var(--shift); } .t-free { --c: var(--free); }
+
+/* Marca, menu y franjas laterales */
+.app-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+@media (min-width: 821px) { .app-bar { position: sticky; top: 0; z-index: 6; padding-block: 8px; margin-block: -8px; background: var(--bg); box-shadow: 0 6px 6px -6px rgba(0,0,0,.12); } }
+.marca { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.marca svg { width: 36px; height: 36px; flex: none; }
+.marca h1 { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -.01em; }
+.marca small { display: block; margin-top: 4px; font-size: 11.5px; color: var(--accent); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.marca > div { min-width: 0; }
+body::before, body::after { content: ""; position: fixed; top: 0; bottom: 0; width: 6px; opacity: .75; pointer-events: none; z-index: 1;
+  background: linear-gradient(var(--shift) 0 40%, var(--accent) 40% 60%, var(--free) 60% 100%); }
+body::before { left: 0; } body::after { right: 0; transform: scaleY(-1); }
+.tabs { display: flex; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.tab { display: flex; align-items: center; gap: 7px; border: 0; background: none; border-radius: 8px; padding: 6px 14px; min-height: 36px; font-weight: 600; font-size: 14px; color: var(--muted); white-space: nowrap; }
+.tab svg, .ico svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tab:hover { color: var(--ink); background: var(--bg); }
+.tab[aria-current="page"] { background: var(--accent); color: var(--accent-ink); }
+.extra { display: flex; align-items: center; gap: 6px; }
+.tc { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 0 2px 0 10px; height: 32px; white-space: nowrap; }
+.tc input { width: 54px; border: 0; background: transparent; font-family: var(--f-num); font-size: 12px; padding: 2px; -moz-appearance: textfield; }
+.tc input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.tc button, .ico { border: 0; background: none; border-radius: 999px; min-width: 28px; height: 28px; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; }
+.ico { border: 1px solid var(--line); background: var(--surface); width: 32px; height: 32px; }
+.tc button:hover, .ico:hover { color: var(--ink); }
+
+/* Fichas */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; position: relative; overflow: hidden; }
+.panel.ficha::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--c, var(--accent)); }
+.panel-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-width: 0; }
+.panel-head h2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vista { display: flex; flex-direction: column; gap: 20px; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.pie { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 8px; background: color-mix(in srgb, var(--c, var(--accent)) 10%, var(--surface)); }
+.grande { font-size: clamp(30px, 6vw, 42px); font-weight: 500; line-height: 1.05; }
+.barra { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.barra i { display: block; height: 100%; background: var(--c, var(--accent)); }
+.frase { margin: 0; font-weight: 500; }
+.frase.ok { color: var(--ok); } .frase.warn { color: var(--warn); }
+.dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.mini { border: 1px solid color-mix(in srgb, var(--c) 35%, var(--line)); background: color-mix(in srgb, var(--c) 9%, var(--surface)); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mini .nombre { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.mini .num { font-size: 17px; }
+.mini small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta-campo { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+.meta-campo input { width: 96px; border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 5px 8px; font-family: var(--f-num); }
+
+/* Filas y estados */
+.filas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.filas li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 4px 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.filas li:last-child { border-bottom: 0; }
+.filas .d { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.filas .d span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.filas .d small { color: var(--muted); }
+.filas .reg { display: flex; flex-direction: column; min-width: 0; }
+.filas .reg > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.filas .reg small { font-size: 12px; }
+.filas .d > b, .filas .d > small { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.filas .der { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+.monto { font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; } /* montos de cada registro: letra de texto */
+.estado { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; color: var(--c); }
+.estado::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.e-cobrado { --c: var(--ok); } .e-pendiente { --c: var(--warn); } .e-atrasado { --c: var(--danger); } .e-curso { --c: var(--accent); } .e-vacio, .e-futuro { --c: var(--muted); }
+.vacio { color: var(--muted); font-size: 14px; margin: 0; padding: 6px 0; }
+.borrar[data-armado] { color: var(--danger); border-color: var(--danger); }
+
+/* Trabajo */
+.arranque { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.go { border: 1px solid color-mix(in srgb, var(--c) 40%, var(--line)); background: color-mix(in srgb, var(--c) 10%, var(--surface)); border-radius: 14px; padding: 22px 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left; position: relative; overflow: hidden; min-width: 0; }
+.go::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--c); }
+.go:hover:not(:disabled) { border-color: var(--c); }
+.go:disabled { opacity: .45; cursor: not-allowed; }
+.go .play { width: 44px; height: 44px; border-radius: 50%; background: var(--c); display: grid; place-items: center; margin-bottom: 6px; }
+.go .play svg { width: 18px; height: 18px; fill: var(--surface); margin-left: 3px; }
+.go > span:last-child { display: flex; flex-direction: column; min-width: 0; max-width: 100%; }
+.go b { font-family: var(--f-display); font-size: 20px; }
+.go small { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.activo { position: sticky; top: 64px; z-index: 5; display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--c); background: color-mix(in srgb, var(--c) 12%, var(--surface)); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+.activo .reloj { font-size: 28px; font-weight: 500; line-height: 1; }
+.activo .info { display: flex; flex-direction: column; min-width: 0; }
+.activo .info b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.activo .info small { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.activo .info small.alerta { color: var(--warn); font-weight: 600; }
+.activo .ctrl { display: flex; flex-wrap: wrap; gap: 6px; }
+.activo.pausado .reloj { opacity: .55; }
+
+/* Semana: plan vs real */
+.semana { list-style: none; margin: 0; padding: 0; }
+.sem-fila { display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.semana li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.semana li:last-child { border-bottom: 0; }
+.semana .dia { display: flex; flex-direction: column; white-space: nowrap; }
+.semana .dia small { color: var(--muted); font-size: 12px; }
+.semana li.hoy .dia b { color: var(--accent); }
+.slots { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.slot { --c: var(--shift); display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 999px; font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); background: color-mix(in srgb, var(--c) 12%, var(--surface)); }
+.slot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+.slot button { border: 0; background: none; padding: 0 0 0 2px; color: var(--muted); font-size: 15px; line-height: 1; }
+.slot button:hover { color: var(--danger); }
+.s-ok { --c: var(--ok); } .s-parcial { --c: var(--warn); } .s-no { --c: var(--muted); } .s-futuro { --c: var(--shift); } .s-curso { --c: var(--accent); }
+.slot.t-free { --c: var(--free); }
+.agregar { height: 26px; border: 1px dashed var(--line); background: none; border-radius: 999px; padding: 0 8px; font-size: 12.5px; color: var(--muted); max-width: 100%; }
+.agregar:hover { border-color: var(--accent); color: var(--ink); }
+.col-dia { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.monto-dia { font-size: 13px; font-weight: 500; }
+.monto-dia.cero { color: var(--muted); font-weight: 400; }
+.c-ok, .sub b.c-ok { color: var(--ok); } .c-warn, .sub b.c-warn { color: var(--warn); }
+.cab-col { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 8px; border-top: 3px solid var(--c); background: color-mix(in srgb, var(--c) 9%, var(--surface)); min-width: 0; }
+.cab-col b { font-size: 17px; font-weight: 600; }
+.t-plan { --c: var(--shift); } .t-real { --c: var(--accent); }
+.leyenda { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.leyenda .slot { font-size: 11.5px; height: 22px; }
+
+/* Mes / año */
+.nav-per { display: flex; align-items: center; gap: 6px; }
+.nav-per b { font-family: var(--f-display); font-size: 17px; min-width: 128px; text-align: center; white-space: nowrap; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+th, td { padding: 9px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; border-top: 3px solid var(--c, var(--line)); }
+td.tn, th.tn { background: color-mix(in srgb, var(--c) 8%, var(--surface)); }
+.col-pag { --c: var(--ok); } .col-neto { --c: var(--accent); }
+tbody tr { cursor: pointer; }
+tbody tr:hover td { background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+tfoot td { font-weight: 700; border-bottom: 0; }
+
+/* Ventanas */
+.velo { position: fixed; inset: 0; z-index: 7; background: rgba(0,0,0,.25); }
+.pop { position: fixed; top: 96px; right: 24px; width: min(400px, calc(100vw - 32px)); max-height: min(80vh, 640px); z-index: 8; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.18); }
+.pop-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); cursor: move; user-select: none; touch-action: none; }
+.pop-head h2 { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pop-cerrar { border: 0; background: none; font-size: 22px; line-height: 1; padding: 4px 8px; border-radius: 6px; color: var(--muted); }
+.pop-cerrar:hover { color: var(--ink); background: var(--bg); }
+.pop form, .pop .cuerpo { padding: 14px; overflow-y: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.campo { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.campo.ancho, .ancho { grid-column: 1 / -1; }
+.campo label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.campo input { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 8px 10px; min-height: 40px; width: 100%; min-width: 0; }
+.tipo-sel { display: flex; gap: 6px; }
+.botones { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.msg { margin: 0; font-size: 13px; color: var(--danger); }
+.msg:empty { display: none; }
+.sep { grid-column: 1 / -1; border-top: 1px solid var(--line); padding-top: 10px; }
+.login { position: fixed; inset: 0; z-index: 9; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.login-caja { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 18px; position: relative; overflow: hidden; }
+.login-caja::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--accent); }
+.login-caja .marca small { white-space: normal; }
+.login form { display: flex; flex-direction: column; gap: 12px; }
+.login .hint:empty { display: none; }
+.aviso-deshacer { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; gap: 12px; background: var(--ink); color: var(--bg); padding: 10px 12px 10px 16px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.25); font-size: 14px; width: max-content; max-width: calc(100vw - 32px); }
+.aviso-deshacer .chip { background: transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 50%, transparent); }
+
+@media (max-width: 820px) {
+  .cols, .arranque { grid-template-columns: minmax(0, 1fr); }
+  .wrap { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; border-radius: 0; border-width: 1px 0 0; padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); }
+  .tab { flex: 1; flex-direction: column; justify-content: center; gap: 3px; padding: 6px 2px; min-height: 50px; font-size: 12px; }
+  .tab svg { width: 20px; height: 20px; }
+  .tab:hover { background: none; }
+  .tab[aria-current="page"] { background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--accent); }
+  /* Celular: logo, nombre y botones en una fila; el lema completo debajo */
+  .app-bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 10px; row-gap: 6px; }
+  .app-bar .marca, .app-bar .marca > div { display: contents; }
+  .app-bar .marca small { grid-column: 1 / -1; grid-row: 2; margin-top: 0; }
+  .extra { grid-column: 3; grid-row: 1; }
+  .activo { position: static; }
+  body::before, body::after { display: none; }
+  .pop { top: auto !important; left: 0 !important; right: 0; bottom: 0; width: auto; max-height: 75vh; border-radius: 14px 14px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+  .pop-head { cursor: default; }
+  .aviso-deshacer { bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+@media (max-width: 460px) {
+  .panel { padding: 14px; }
+  .filas .acciones { grid-column: 1 / -1; justify-self: end; }
+  .nav-per b { min-width: 0; font-size: 16px; }
+  .nav-per .btn { padding-inline: 10px; }
+  .sem-fila { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .sem-cab > span:first-child { display: none; }
+  .semana .dia { grid-column: 1 / -1; flex-direction: row; gap: 6px; align-items: baseline; }
+  .marca h1 { font-size: 22px; }
+  .marca svg { width: 32px; height: 32px; }
+  .activo { grid-template-columns: minmax(0, 1fr) auto; }
+  .activo .reloj { grid-row: 1; font-size: 24px; }
+  .activo .info { grid-column: 1 / -1; grid-row: 2; }
+  .activo .ctrl { grid-column: 1 / -1; grid-row: 3; }
+  .go { padding: 16px 14px; flex-direction: row; align-items: center; gap: 12px; }
+  .go .play { margin: 0; }
+}
+@media (max-width: 360px) {
+  .filas .reg .largo { display: none; }
+  .tc input { width: 52px; }
+  .tc { padding-left: 8px; }
+  .tc button { min-width: 22px; }
+  .extra { gap: 4px; }
+  .ico { width: 30px; height: 30px; }
+  .marca h1 { font-size: 20px; }
+  .app-bar { column-gap: 6px; }
+  .marca svg { width: 28px; height: 28px; }
+  .marca small { font-size: 10.5px; }
+  .dos { gap: 8px; }
+  .mini { padding: 8px 9px; }
+  .mini .num { font-size: 15px; }
+  .mini small { font-size: 11px; }
+  .slot { padding: 0 7px; font-size: 12px; }
+}
+</style>
+</head><body>
+<div class="wrap">
+  <header class="app-bar">
+    <div class="marca">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="var(--accent)"/><path d="M9 19v-3a8 8 0 0 1 16 0v3" fill="none" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round"/><rect x="7" y="18" width="5" height="7" rx="2" fill="var(--accent-ink)"/><rect x="22" y="18" width="5" height="7" rx="2" fill="var(--accent-ink)"/></svg>
+      <div><h1>Lolito</h1><small>Tu aliado en tu manejo de minutos interpretados</small></div>
+    </div>
+    <nav class="tabs" aria-label="Secciones">
+      <button class="tab" type="button" data-ir="resumen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15a9 9 0 0 1 18 0M12 15l4-5"/></svg>Resumen</button>
+      <button class="tab" type="button" data-ir="trabajo"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>Trabajo</button>
+      <button class="tab" type="button" data-ir="semana"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M6 9h3M15 9h3M6 13h3M15 13h3"/></svg>Semana</button>
+      <button class="tab" type="button" data-ir="historial"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Historial</button>
+      <button class="tab" type="button" data-ir="anio"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Año</button>
+    </nav>
+    <div class="extra">
+      <label class="tc" id="tcLabel">TC <input id="tc" type="number" step="0.0001" min="0.01" inputmode="decimal" aria-label="Tipo de cambio, soles por dólar"><button type="button" id="tcAuto" title="Traer el tipo de cambio del día" aria-label="Traer el tipo de cambio del día">↻</button></label>
+      <button class="ico" type="button" id="btnTema" title="Cambiar a modo claro u oscuro" aria-label="Cambiar a modo claro u oscuro"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+      <button class="ico" type="button" id="btnAjustes" title="Ajustes" aria-label="Ajustes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    </div>
+  </header>
+
+  <div class="activo" id="activo" hidden>
+    <span class="dot"></span>
+    <div class="info"><b id="acTitulo"></b><small id="acNota"></small></div>
+    <span class="reloj num" id="acReloj">00:00</span>
+    <div class="ctrl" id="acCtrl"></div>
+  </div>
+
+  <main class="vista" data-vista="resumen">
+    <div class="cols">
+      <section class="panel ficha">
+        <div class="panel-head"><span class="eyebrow" id="rCiclo">Ciclo</span><span class="eyebrow" id="rPago"></span></div>
+        <div><div class="grande num" id="rGanado">$0.00</div><p class="hint sub" id="rSoles"></p><p class="hint sub" id="rNeto"></p></div>
+        <div class="barra"><i id="rBarra" style="width:0"></i></div>
+        <p class="frase" id="rFrase"></p>
+        <p class="hint sub" id="rPlan" hidden></p>
+        <label class="meta-campo">Meta del ciclo (USD) <input id="rMeta" type="number" min="0" step="1" inputmode="decimal"></label>
+        <div class="dos" id="rTipos"></div>
+      </section>
+      <div class="col">
+        <section class="panel">
+          <div class="panel-head"><h2>Cobros</h2></div>
+          <ul class="filas" id="rCobros"></ul>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>Hoy</h2><span class="num" id="rHoyTotal"></span></div>
+          <ul class="filas" id="rHoy"></ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <main class="vista" data-vista="trabajo" hidden>
+    <div class="arranque">
+      <button class="go t-shift" type="button" data-iniciar="shift"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg></span><span><b>Shift</b><small id="goShift"></small></span></button>
+      <button class="go t-free" type="button" data-iniciar="opi"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg></span><span><b>Freelance OPI</b><small id="goOpi"></small></span></button>
+      <button class="go t-free" type="button" data-iniciar="vri"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg></span><span><b>Freelance VRI</b><small id="goVri"></small></span></button>
+    </div>
+    <section class="panel">
+      <div class="panel-head"><h2>Trabajado hoy</h2><button class="btn" type="button" data-nuevo>+ Manual</button></div>
+      <ul class="filas" id="tHoy"></ul>
+    </section>
+  </main>
+
+  <main class="vista" data-vista="semana" hidden>
+    <section class="panel">
+      <div class="panel-head">
+        <div class="nav-per"><button class="btn" type="button" id="sAnt" aria-label="Semana anterior">‹</button><b id="sTitulo"></b><button class="btn" type="button" id="sSig" aria-label="Semana siguiente">›</button></div>
+        <button class="chip" type="button" id="sHoy">Hoy</button>
+      </div>
+      <div><p class="hint sub" id="sResumen"></p><p class="hint sub" id="sGanado"></p><p class="hint sub" id="sProy"></p></div>
+      <div class="sem-fila sem-cab"><span></span><span class="cab-col t-plan"><span class="eyebrow">Planeado</span><b class="num" id="sCabPlan"></b></span><span class="cab-col t-real"><span class="eyebrow">Real</span><b class="num" id="sCabReal"></b></span></div>
+      <ul class="semana" id="sDias"></ul>
+      <p class="leyenda"><span class="slot s-ok">Cumplido</span><span class="slot s-parcial">Parcial</span><span class="slot s-no">No hecho</span><span class="slot s-futuro">Por venir</span></p>
+    </section>
+  </main>
+
+  <main class="vista" data-vista="historial" hidden>
+    <section class="panel">
+      <div class="panel-head">
+        <div class="nav-per"><button class="btn" type="button" id="hAnt" aria-label="Mes anterior">‹</button><b id="hMes"></b><button class="btn" type="button" id="hSig" aria-label="Mes siguiente">›</button></div>
+        <button class="btn" type="button" data-nuevo>+ Manual</button>
+      </div>
+      <div class="dos" id="hTipos"></div>
+      <ul class="filas" id="hLista"></ul>
+    </section>
+  </main>
+
+  <main class="vista" data-vista="anio" hidden>
+    <section class="panel">
+      <div class="panel-head">
+        <div class="nav-per"><button class="btn" type="button" id="aAnt" aria-label="Año anterior">‹</button><b id="aAnio"></b><button class="btn" type="button" id="aSig" aria-label="Año siguiente">›</button></div>
+      </div>
+      <p class="hint">Toca un mes para anotar lo que te pagaron o cambiar su fecha de pago.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Ciclo</th><th>Calculado</th><th class="tn col-pag">Pagado</th><th>Diferencia</th><th>Comisión</th><th class="tn col-neto">Te llega</th><th>En soles</th><th>Pago</th><th>Estado</th></tr></thead>
+        <tbody id="aFilas"></tbody>
+        <tfoot id="aTotal"></tfoot>
+      </table></div>
+    </section>
+  </main>
+
+</div>
+
+<div class="velo" id="velo" hidden></div>
+
+<div class="pop" id="popReg" role="dialog" aria-labelledby="prTitulo" hidden>
+  <div class="pop-head"><h2 id="prTitulo">Registro</h2><button class="pop-cerrar" type="button" aria-label="Cerrar">×</button></div>
+  <form id="fReg" novalidate>
+    <div class="campo ancho"><label>Tipo</label><div class="tipo-sel"><button class="chip" type="button" data-tipo="shift">Shift</button><button class="chip" type="button" data-tipo="opi">Freelance OPI</button><button class="chip" type="button" data-tipo="vri">Freelance VRI</button></div></div>
+    <div class="campo ancho"><label for="frFecha">Fecha</label><input id="frFecha" type="date"></div>
+    <div class="campo"><label for="frMin">Minutos</label><input id="frMin" type="number" min="0" step="1" inputmode="numeric"></div>
+    <div class="campo" id="frSegCampo"><label for="frSeg">Segundos</label><input id="frSeg" type="number" min="0" max="59" step="1" inputmode="numeric"></div>
+    <p class="hint ancho" id="frNota"></p>
+    <p class="msg ancho" id="frMsg" role="status"></p>
+    <div class="botones ancho"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn primary">Guardar</button></div>
+  </form>
+</div>
+
+<div class="pop" id="popSobra" role="dialog" aria-labelledby="psTitulo" hidden>
+  <div class="pop-head"><h2 id="psTitulo">¿Qué fue el sobrante?</h2><button class="pop-cerrar" type="button" aria-label="Cerrar">×</button></div>
+  <form id="fSobra" novalidate>
+    <p class="hint ancho sub" id="psTexto"></p>
+    <div class="campo ancho"><label>Guardar como</label><div class="tipo-sel"><button class="chip" type="button" data-sobra="shift">Shift</button><button class="chip" type="button" data-sobra="opi">Freelance OPI</button><button class="chip" type="button" data-sobra="vri">Freelance VRI</button></div></div>
+    <p class="hint ancho sub" id="psValor"></p>
+    <p class="hint ancho">Si cancelas, el cronómetro sigue corriendo.</p>
+    <div class="botones ancho"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn primary">Guardar</button></div>
+  </form>
+</div>
+
+<div class="pop" id="popCiclo" role="dialog" aria-labelledby="pcTitulo" hidden>
+  <div class="pop-head"><h2 id="pcTitulo">Ciclo</h2><button class="pop-cerrar" type="button" aria-label="Cerrar">×</button></div>
+  <form id="fCiclo" novalidate>
+    <p class="hint ancho sub" id="pcCalc"></p>
+    <div class="campo"><label for="pcPagado">Pagado (USD)</label><input id="pcPagado" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Aún no"></div>
+    <div class="campo"><label for="pcPago">Fecha de pago</label><input id="pcPago" type="date"></div>
+    <div class="campo ancho"><label for="pcMeta">Meta del ciclo (USD)</label><input id="pcMeta" type="number" min="0" step="1" inputmode="decimal"></div>
+    <p class="hint ancho sub" id="pcNeto"></p>
+    <div class="botones ancho"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn primary">Guardar</button></div>
+  </form>
+</div>
+
+<div class="pop" id="popAjustes" role="dialog" aria-labelledby="paTitulo" hidden>
+  <div class="pop-head"><h2 id="paTitulo">Ajustes</h2><button class="pop-cerrar" type="button" aria-label="Cerrar">×</button></div>
+  <form id="fAjustes" novalidate>
+    <div class="campo ancho"><label for="aaShift">Tarifa Shift (USD/h)</label><input id="aaShift" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="campo"><label for="aaOpi">Freelance OPI (USD/h)</label><input id="aaOpi" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="campo"><label for="aaVri">Freelance VRI (USD/h)</label><input id="aaVri" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="campo"><label for="aaPct">Comisión de envío (%)</label><input id="aaPct" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="campo"><label for="aaFijo">Comisión fija (USD)</label><input id="aaFijo" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="campo"><label for="aaMeta">Meta por ciclo (USD)</label><input id="aaMeta" type="number" min="0" step="1" inputmode="decimal"></div>
+    <div class="campo"><label for="aaAjuste">Ajuste TC al paralelo (S/)</label><input id="aaAjuste" type="number" min="0" step="0.001" inputmode="decimal"></div>
+    <p class="hint ancho">Las tarifas nuevas se aplican desde el próximo registro; lo ya trabajado conserva su tarifa.</p>
+    <p class="hint ancho" id="aaTc"></p>
+    <div class="botones ancho"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn primary">Guardar</button></div>
+    <div class="sep botones"><button type="button" class="btn" id="btnCopia">↓ Descargar copia</button><button type="button" class="btn" id="btnRestaurar">Restaurar copia</button><button type="button" class="btn" id="btnSalir" hidden>Cerrar sesión</button><input type="file" id="fCopia" accept="application/json,.json" hidden></div>
+  </form>
+</div>
+
+<div class="login" id="login" hidden>
+  <div class="login-caja">
+    <div class="marca">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="var(--accent)"/><path d="M9 19v-3a8 8 0 0 1 16 0v3" fill="none" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round"/><rect x="7" y="18" width="5" height="7" rx="2" fill="var(--accent-ink)"/><rect x="22" y="18" width="5" height="7" rx="2" fill="var(--accent-ink)"/></svg>
+      <div><h1>Lolito</h1><small>Tu aliado en tu manejo de minutos interpretados</small></div>
+    </div>
+    <form id="lForm" novalidate>
+      <div class="campo"><label for="lEmail">Correo</label><input id="lEmail" type="email" autocomplete="username"></div>
+      <div class="campo"><label for="lPass">Contraseña</label><input id="lPass" type="password" autocomplete="current-password"></div>
+      <button class="btn primary" type="submit" id="lBtn">Entrar</button>
+    </form>
+    <p class="hint" id="lMsg" role="status"></p>
+  </div>
+</div>
+
+<div class="aviso-deshacer" id="avisoD" role="status" hidden><span id="avisoTxt"></span><button type="button" class="chip" id="avisoBtn">Deshacer</button></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var KEY = 'lolito.v1';
+  var SHIFT_SEG = 3600; // cada shift dura 1 hora
+  var AVISO_FREE_SEG = 7200; // aviso si una llamada freelance lleva 2 h sin detenerse
+  // Cronograma de pagos 2026: ciclo (mes trabajado) -> fecha de pago. Editable por ciclo desde la pestaña Año.
+  var CRONOGRAMA = {
+    '2026-01': '2026-02-27', '2026-02': '2026-03-31', '2026-03': '2026-04-30', '2026-04': '2026-05-29',
+    '2026-05': '2026-06-30', '2026-06': '2026-07-31', '2026-07': '2026-08-31', '2026-08': '2026-09-30',
+    '2026-09': '2026-10-30', '2026-10': '2026-11-30', '2026-11': '2026-12-31', '2026-12': '2027-01-29'
+  };
+  var MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  var DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  var NOMBRE = { shift: 'Shift', freelance: 'Freelance', opi: 'Freelance OPI', vri: 'Freelance VRI' };
+  function nombreReg(r) { return r.tipo === 'shift' ? 'Shift' : 'Freelance' + (r.modo ? ' ' + r.modo.toUpperCase() : ''); }
+  function claseDe(r) { return r.tipo === 'shift' ? 'shift' : r.modo || 'vri'; }
+  function tarifaDe(clase) { return clase === 'shift' ? A.tarifaShift : clase === 'opi' ? A.tarifaOpi : A.tarifaVri; }
+
+  // ---------- Utilidades ----------
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function deYmd(s) { var p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function claveMes(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1); }
+  function nombreCiclo(k) { var p = k.split('-'); return MESES[+p[1] - 1] + ' ' + p[0]; }
+  function fechaCorta(s) { if (!s) return '—'; var d = deYmd(s); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(2); }
+  var fmt2 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function usd(n) { return (n < 0 ? '−$' : '$') + fmt2.format(Math.abs(n || 0)); }
+  function soles(n) { return 'S/ ' + fmt2.format(n || 0); }
+  function solesCorto(n) { return n >= 1000 ? 'S/ ' + (n / 1000).toFixed(1) + 'k' : 'S/ ' + Math.round(n); }
+  function reloj(seg) { seg = Math.floor(seg); var hh = Math.floor(seg / 3600), mm = Math.floor(seg % 3600 / 60), ss = seg % 60; return (hh ? hh + ':' + pad(mm) : pad(mm)) + ':' + pad(ss); }
+  function duracion(r) {
+    var s = Math.floor(r.seg);
+    if (r.tipo === 'freelance') return Math.floor(s / 60) + ' min';
+    return Math.floor(s / 60) + 'm ' + pad(s % 60) + 's';
+  }
+  function num(v) { var n = parseFloat(v); return isFinite(n) && n >= 0 ? n : null; }
+  function h(tag, attrs) {
+    var el = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v == null || v === false) return;
+      if (k === 'text') el.textContent = v;
+      else if (k === 'class') el.className = v;
+      else if (k === 'style') el.style.cssText = v;
+      else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? '' : v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var c = arguments[i];
+      if (c == null) continue;
+      el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    }
+    return el;
+  }
+
+  // ---------- Conexión ----------
+  // Datos del proyecto de Supabase (Project Settings → API). La clave publicable puede ir aquí: la protege RLS.
+  // Si se dejan vacíos, Lolito guarda solo en este navegador.
+  var SUPABASE_URL = '';
+  var SUPABASE_KEY = '';
+  var nube = !!(SUPABASE_URL && SUPABASE_KEY);
+
+  // ---------- Datos ----------
+  var local = {
+    leer: function () { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } },
+    escribir: function (d) { try { localStorage.setItem(KEY, JSON.stringify(d)); return true; } catch (e) { return false; } }
+  };
+  function vacio() {
+    return { registros: [], ciclos: {}, plan: {}, ajustes: { tarifaShift: 0, tarifaOpi: 0, tarifaVri: 0, comPct: 0, comFijo: 0, meta: 0, tasa: 3.4, tasaManual: false, tasaFecha: '', ajusteTc: 0.01 } };
+  }
+  var D, A;
+  // plan: { 'AAAA-MM-DD': [9, 10, 14] } = shifts planeados a esas horas en punto
+  function usar(d) {
+    D = d || vacio(); D.plan = D.plan || {}; A = D.ajustes;
+    if (A.ajusteTc == null) { A.ajusteTc = 0.01; A.tasaFecha = ''; } // nuevo: TC = SUNAT compra + ajuste; se vuelve a traer hoy
+    if (A.tarifaOpi == null) { A.tarifaOpi = A.tarifaVri = A.tarifaFree || 0; delete A.tarifaFree; } // antes había una sola tarifa freelance
+    D.registros.forEach(function (r) { if (r.tipo === 'shift' && r.fin == null && r.bloque == null) r.bloque = inicioHora(r.inicio); }); // shift en curso de antes de los bloques
+  }
+  function inicioHora(ms) { var d = new Date(ms); d.setMinutes(0, 0, 0); return d.getTime(); }
+  usar(nube ? null : local.leer());
+
+  // ---------- Supabase ----------
+  // Tabla `registros` (un shift o llamada por fila) y una fila en `ajustes` con el resto (ajustes, ciclos, plan).
+  // Se sube solo lo que cambió desde la última vez que la nube y esta pantalla coincidían.
+  var sb = null, uid = null, listo = false, guardando = 0, refresco = null;
+  var firmas = {}, firmaAj = ''; // lo que hay en la nube: id -> JSON del registro, y JSON de ajustes
+  function chk(r) { if (r && r.error) throw r.error; return r; }
+  // JSON con las claves ordenadas: la nube (jsonb) reordena las claves y así se comparan bien
+  function canon(v) {
+    return JSON.stringify(v, function (k, x) {
+      return x && typeof x === 'object' && !Array.isArray(x) ? Object.keys(x).sort().reduce(function (o, c) { o[c] = x[c]; return o; }, {}) : x;
+    });
+  }
+  function restoDatos() { return { ajustes: D.ajustes, ciclos: D.ciclos, plan: D.plan }; }
+  function guardar() {
+    if (!nube) { if (!local.escribir(D)) avisar('No se pudieron guardar tus datos en este navegador.'); return; }
+    if (!listo || !uid) return; // nunca guardar antes de cargar: un estado vacío pisaría los datos reales
+    var ups = [], vivos = {}, aj = canon(restoDatos()), ajAntes = firmaAj;
+    D.registros.forEach(function (r) { var j = canon(r); vivos[r.id] = 1; if (firmas[r.id] !== j) ups.push({ user_id: uid, id: r.id, datos: r, j: j }); });
+    var dels = Object.keys(firmas).filter(function (id) { return !vivos[id]; });
+    if (!ups.length && !dels.length && aj === ajAntes) return;
+    var previas = {};
+    ups.forEach(function (f) { previas[f.id] = firmas[f.id]; firmas[f.id] = f.j; delete f.j; });
+    dels.forEach(function (id) { previas[id] = firmas[id]; delete firmas[id]; });
+    firmaAj = aj;
+    guardando++;
+    Promise.all([
+      ups.length ? sb.from('registros').upsert(ups, { onConflict: 'user_id,id' }).then(chk) : null,
+      dels.length ? sb.from('registros').delete().in('id', dels).then(chk) : null,
+      aj !== ajAntes ? sb.from('ajustes').upsert({ user_id: uid, datos: JSON.parse(aj), actualizado: new Date().toISOString() }).then(chk) : null
+    ]).catch(function () {
+      // se deshace la marca para reintentar en el próximo cambio
+      Object.keys(previas).forEach(function (id) { if (previas[id] == null) delete firmas[id]; else firmas[id] = previas[id]; });
+      ups.forEach(function (f) { firmas[f.id] = '?'; });
+      firmaAj = '?';
+      avisar('No se pudieron guardar tus datos. Revisa tu conexión.');
+    }).then(function () { guardando--; });
+  }
+  function traerRegistros(desde, acc) { // de 1000 en 1000, el límite por consulta
+    return sb.from('registros').select('id,datos').range(desde, desde + 999).then(chk).then(function (r) {
+      acc = acc.concat(r.data || []);
+      return (r.data || []).length === 1000 ? traerRegistros(desde + 1000, acc) : acc;
+    });
+  }
+  function cargar() {
+    if (!sb || !uid) return Promise.resolve();
+    return Promise.all([traerRegistros(0, []), sb.from('ajustes').select('datos').maybeSingle().then(chk)]).then(function (v) {
+      if (guardando) return; // no recargar mientras se guarda
+      var f = {}, aj = v[1].data ? v[1].data.datos : null, fa = aj ? canon(aj) : '';
+      v[0].forEach(function (x) { f[x.id] = canon(x.datos); });
+      var igual = listo && fa === firmaAj && Object.keys(f).length === Object.keys(firmas).length && Object.keys(f).every(function (id) { return f[id] === firmas[id]; });
+      if (igual) return; // sin cambios no se redibuja: así no se borra lo que estás escribiendo
+      firmas = f; firmaAj = fa;
+      var d = vacio();
+      if (aj) { d.ajustes = Object.assign(d.ajustes, aj.ajustes); d.ciclos = aj.ciclos || {}; d.plan = aj.plan || {}; }
+      d.registros = v[0].map(function (x) { return x.datos; });
+      usar(d);
+      var primera = !listo;
+      listo = true;
+      $('login').hidden = true;
+      render(); rodar();
+      if (primera) traerTasa(false);
+    }).catch(function () { if (listo) avisar('No se pudieron cargar tus datos. Revisa tu conexión.'); else $('lMsg').textContent = 'No se pudieron cargar tus datos. Revisa tu conexión y recarga.'; });
+  }
+  function sesion(s) {
+    if (s && s.user) {
+      if (uid === s.user.id) return;
+      uid = s.user.id;
+      $('lForm').hidden = true; $('lPass').value = ''; $('lMsg').textContent = 'Cargando tus datos…';
+      cargar();
+      if (!refresco) refresco = setInterval(cargar, 30000);
+    } else {
+      uid = null; listo = false; firmas = {}; firmaAj = '';
+      if (refresco) { clearInterval(refresco); refresco = null; }
+      usar(null); render();
+      $('login').hidden = false; $('lForm').hidden = false; $('lMsg').textContent = '';
+    }
+  }
+  function conectar() {
+    $('login').hidden = false; $('lForm').hidden = true; $('lMsg').textContent = 'Conectando…';
+    var s = document.createElement('script'); // la librería se carga solo si hay nube
+    s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
+    s.onerror = function () { $('lMsg').textContent = 'No se pudo conectar. Revisa tu conexión y recarga.'; };
+    s.onload = function () {
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      sb.auth.getSession().then(function (r) { sesion(r.data && r.data.session); });
+      sb.auth.onAuthStateChange(function (ev, ses) { setTimeout(function () { sesion(ev === 'SIGNED_OUT' ? null : ses); }, 0); });
+    };
+    document.head.appendChild(s);
+  }
+  // Toda acción que cambia datos pasa por aquí: guarda, redibuja y ofrece Deshacer
+  function cambiar(txt, fn) {
+    var antes = JSON.stringify(D);
+    fn();
+    guardar(); render();
+    if (txt) avisar(txt, function () { usar(JSON.parse(antes)); guardar(); render(); });
+  }
+
+  // ---------- Cálculos ----------
+  function activo() { return D.registros.find(function (r) { return r.fin == null; }) || null; }
+  function pausado(r) { var p = r.pausas[r.pausas.length - 1]; return !!p && p.h == null; }
+  function segCorridos(r, ahora) {
+    var fin = r.fin != null ? r.fin : ahora, pausa = 0;
+    r.pausas.forEach(function (p) { pausa += (p.h != null ? p.h : fin) - p.d; });
+    return Math.max(0, (fin - r.inicio - pausa) / 1000);
+  }
+  function segReg(r) { return r.fin == null ? segCorridos(r, Date.now()) : r.seg; }
+  // Shift: se paga cada segundo. Freelance: solo minutos completos (15:54 -> 15 min)
+  function segPagados(r) { var s = segReg(r); return r.tipo === 'shift' ? s : Math.floor(s / 60) * 60; }
+  function monto(r) { return segPagados(r) / 3600 * r.tarifa; }
+  function comision(base) { return base > 0 ? base * A.comPct / 100 + A.comFijo : 0; }
+  function ciclo(k) {
+    var c = D.ciclos[k] || {}, regs = D.registros.filter(function (r) { return r.fecha.slice(0, 7) === k; });
+    var t = { shift: { n: 0, seg: 0, usd: 0 }, freelance: { n: 0, seg: 0, usd: 0 } };
+    regs.forEach(function (r) { var x = t[r.tipo]; x.n++; x.seg += segPagados(r); x.usd += monto(r); });
+    var calc = t.shift.usd + t.freelance.usd, pagado = c.pagado != null ? c.pagado : null;
+    var base = pagado != null ? pagado : calc, com = comision(base), neto = Math.max(0, base - com);
+    var pago = c.pago || CRONOGRAMA[k] || '', hoyK = claveMes(new Date()), estado;
+    if (k > hoyK) estado = 'futuro';
+    else if (k === hoyK) estado = 'curso';
+    else if (pagado != null) estado = 'cobrado';
+    else if (!calc) estado = 'vacio';
+    else if (pago && pago < ymd(new Date())) estado = 'atrasado';
+    else estado = 'pendiente';
+    return { k: k, regs: regs, t: t, calc: calc, pagado: pagado, com: com, neto: neto, pago: pago, estado: estado, meta: c.meta != null ? c.meta : A.meta };
+  }
+  var ESTADO = { cobrado: 'Cobrado', pendiente: 'Pendiente', atrasado: 'Atrasado', curso: 'En curso', vacio: 'Sin trabajo', futuro: '—' };
+  function estadoEl(e) { return h('span', { class: 'estado e-' + e, text: ESTADO[e] }); }
+
+  // ---------- Vista ----------
+  function lunes(d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x; }
+  var ui = { vista: 'resumen', mes: claveMes(new Date()), anio: new Date().getFullYear(), semana: lunes(new Date()) };
+  try { ui.vista = localStorage.getItem('lolito.vista') || 'resumen'; } catch (e) {}
+
+  function render() {
+    document.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-current', b.dataset.ir === ui.vista ? 'page' : 'false'); });
+    document.querySelectorAll('.vista').forEach(function (v) { v.hidden = v.dataset.vista !== ui.vista; });
+    if (document.activeElement !== $('tc')) $('tc').value = A.tasa;
+    $('tcLabel').title = 'Tipo de cambio: ' + descTasa();
+    renderActivo(); renderResumen(); renderTrabajo(); renderSemana(); renderHistorial(); renderAnio();
+  }
+
+  // ---------- Plan de la semana ----------
+  function inicioSlot(fecha, hora) { return deYmd(fecha).getTime() + hora * 3600e3; }
+  // Un shift planeado se cumple con el shift real de ese mismo bloque de reloj (:00 a :00)
+  function estadoSlot(fecha, hora) {
+    var ini = inicioSlot(fecha, hora), ahora = Date.now();
+    var r = D.registros.find(function (x) { return x.tipo === 'shift' && (x.bloque != null ? x.bloque === ini : x.inicio >= ini && x.inicio < ini + 3600e3); });
+    if (r) return r.fin == null ? 'curso' : r.seg >= 3540 ? 'ok' : 'parcial';
+    return ini + 3600e3 <= ahora ? 'no' : 'futuro';
+  }
+  // Shifts planeados que aún no empiezan, dentro de un ciclo (mes)
+  function planPendiente(k) {
+    var n = 0, ahora = Date.now();
+    Object.keys(D.plan).forEach(function (f) {
+      if (f.slice(0, 7) === k) D.plan[f].forEach(function (hr) { if (inicioSlot(f, hr) > ahora) n++; });
+    });
+    return n;
+  }
+  function renderSemana() {
+    var ini = ui.semana, fin = new Date(ini.getFullYear(), ini.getMonth(), ini.getDate() + 6), hoy = ymd(new Date());
+    $('sTitulo').textContent = ini.getDate() + ' ' + MESES[ini.getMonth()].slice(0, 3) + ' – ' + fin.getDate() + ' ' + MESES[fin.getMonth()].slice(0, 3);
+    var ul = $('sDias'), plan = 0, cumplidos = 0, real = 0, planUsd = 0;
+    ul.replaceChildren();
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(ini.getFullYear(), ini.getMonth(), ini.getDate() + i), f = ymd(d), horas = (D.plan[f] || []).slice().sort(function (a, b) { return a - b; });
+      var regs = D.registros.filter(function (r) { return r.fecha === f; }).sort(function (a, b) { return a.inicio - b.inicio; });
+      var pl = h('div', { class: 'slots' }), re = h('div', { class: 'slots' });
+      horas.forEach(function (hr) {
+        var e = estadoSlot(f, hr), chip = h('span', { class: 'slot s-' + e }, pad(hr) + ':00');
+        plan++; if (e === 'ok') cumplidos++;
+        chip.appendChild(h('button', { type: 'button', 'aria-label': 'Quitar shift de las ' + hr + ':00', text: '×', onclick: quitarSlot.bind(null, f, hr) }));
+        pl.appendChild(chip);
+      });
+      {
+        var sel = h('select', { class: 'agregar', 'aria-label': 'Planear shift el ' + f, onchange: function (ev) { agregarSlot(ev.target.dataset.f, +ev.target.value); } });
+        sel.dataset.f = f;
+        sel.appendChild(h('option', { value: '', text: '+ Shift' }));
+        for (var hr = 0; hr < 24; hr++) if (horas.indexOf(hr) < 0) sel.appendChild(h('option', { value: hr, text: pad(hr) + ':00' }));
+        pl.appendChild(sel);
+      }
+      regs.forEach(function (r) {
+        var t = new Date(r.inicio), txt = r.fin == null ? 'ahora' : duracion(r);
+        real += monto(r);
+        re.appendChild(h('span', { class: 'slot ' + (r.tipo === 'shift' ? '' : 't-free'), title: nombreReg(r) }, r.tipo === 'shift' ? (r.manual ? '' : pad(t.getHours()) + ':' + pad(t.getMinutes()) + ' · ') + txt : (r.modo ? r.modo.toUpperCase() + ' · ' : '') + txt));
+      });
+      // Dinero del día: lo planeado (shifts × tarifa) frente a lo real
+      var plDia = horas.length * A.tarifaShift, reDia = regs.reduce(function (s, r) { return s + monto(r); }, 0);
+      planUsd += plDia;
+      ul.appendChild(h('li', { class: 'sem-fila' + (f === hoy ? ' hoy' : '') },
+        h('div', { class: 'dia' }, h('b', { text: DIAS[d.getDay()] + ' ' + d.getDate() }), h('small', { text: f === hoy ? 'Hoy' : MESES[d.getMonth()].slice(0, 3) })),
+        h('div', { class: 'col-dia' }, h('span', { class: 'monto-dia num' + (plDia ? '' : ' cero'), text: usd(plDia) }), pl),
+        h('div', { class: 'col-dia' }, h('span', { class: 'monto-dia num ' + comparar(plDia, reDia, f < hoy), text: usd(reDia) }), re)));
+    }
+    $('sCabPlan').textContent = usd(planUsd);
+    $('sCabReal').className = 'num ' + comparar(planUsd, real, true);
+    $('sCabReal').textContent = usd(real);
+    $('sResumen').replaceChildren('Plan: ', h('b', { text: plan + (plan === 1 ? ' shift' : ' shifts') }), ' · cumpliste ', h('b', { text: String(cumplidos) }));
+    var dif = real - planUsd;
+    $('sGanado').replaceChildren('Real vs. plan: ', h('b', { class: comparar(planUsd, real, true), text: (dif > 0 ? '+' : '') + usd(dif) }));
+    var k = claveMes(new Date()), c = ciclo(k), pend = planPendiente(k);
+    $('sProy').replaceChildren(pend ? 'Con tu plan, ' + MESES[+k.slice(5) - 1].slice(0, 3).toLowerCase() + ': ' : 'Sin shifts por venir este mes.', pend ? h('b', { text: usd(c.calc + pend * A.tarifaShift) }) : '', pend && c.meta > 0 ? ' de ' + usd(c.meta) : '');
+  }
+  // Verde si lo real alcanza lo planeado; ámbar si quedó debajo y ese tiempo ya pasó
+  function comparar(plan, real, cerrado) {
+    if (!plan) return '';
+    return real >= plan - 0.005 ? 'c-ok' : cerrado ? 'c-warn' : '';
+  }
+  function agregarSlot(f, hr) {
+    if (!isFinite(hr)) return;
+    cambiar('Shift planeado: ' + fechaCorta(f) + ', ' + pad(hr) + ':00.', function () { (D.plan[f] = D.plan[f] || []).push(hr); });
+  }
+  function quitarSlot(f, hr) {
+    cambiar('Shift de las ' + pad(hr) + ':00 quitado del plan.', function () {
+      D.plan[f] = D.plan[f].filter(function (x) { return x !== hr; });
+      if (!D.plan[f].length) delete D.plan[f];
+    });
+  }
+
+  function filaReg(r, conAcciones) {
+    var der = h('div', { class: 'der' }, h('span', { class: 'monto', text: usd(monto(r)) }));
+    var acciones = conAcciones && r.fin != null ? h('div', { class: 'der acciones' },
+      h('button', { class: 'chip', type: 'button', text: 'Editar', onclick: function () { abrirReg(r); } }),
+      h('button', { class: 'chip borrar', type: 'button', text: 'Borrar', onclick: function (ev) { borrarReg(r, ev.currentTarget); } })) : null;
+    var d = deYmd(r.fecha), inicio = new Date(r.inicio);
+    return h('li', null,
+      h('div', { class: 'd t-' + (r.tipo === 'shift' ? 'shift' : 'free') }, h('span', { class: 'dot' }),
+        h('span', { class: 'reg' },
+          h('span', null, r.tipo === 'shift' ? 'Shift' : r.modo ? h('span', null, h('span', { class: 'largo', text: 'Freelance ' }), r.modo.toUpperCase()) : 'Freelance', ' · ', r.fin == null ? h('b', { text: 'en curso' }) : h('b', { class: 'num', text: duracion(r) })),
+          h('small', null, DIAS[d.getDay()] + ' ' + d.getDate() + (r.manual ? ' · manual' : ', ' + pad(inicio.getHours()) + ':' + pad(inicio.getMinutes())),
+            r.bloque != null && r.inicio - r.bloque >= 60000 ? h('span', { class: 'c-warn', text: ' · tarde ' + Math.floor((r.inicio - r.bloque) / 60000) + ' min' }) : null))),
+      der, acciones);
+  }
+  function lista(ul, regs, conAcciones, vacioTxt) {
+    ul.replaceChildren();
+    if (!regs.length) { ul.appendChild(h('li', null, h('p', { class: 'vacio', text: vacioTxt }))); return; }
+    regs.slice().sort(function (a, b) { return b.inicio - a.inicio; }).forEach(function (r) { ul.appendChild(filaReg(r, conAcciones)); });
+  }
+  function tipos(el, c) {
+    el.replaceChildren();
+    [['shift', 't-shift'], ['freelance', 't-free']].forEach(function (x) {
+      var t = c.t[x[0]], horas = t.seg / 3600;
+      el.appendChild(h('div', { class: 'mini ' + x[1] },
+        h('span', { class: 'nombre' }, h('span', { class: 'dot' }), NOMBRE[x[0]]),
+        h('span', { class: 'num', text: usd(t.usd) }),
+        h('small', { text: x[0] === 'shift' ? t.n + (t.n === 1 ? ' shift · ' : ' shifts · ') + horas.toFixed(2) + ' h' : t.n + (t.n === 1 ? ' llamada · ' : ' llamadas · ') + Math.round(t.seg / 60) + ' min' })));
+    });
+  }
+
+  function renderResumen() {
+    var k = claveMes(new Date()), c = ciclo(k), hoy = new Date();
+    $('rCiclo').textContent = nombreCiclo(k);
+    $('rPago').textContent = c.pago ? 'Pago ' + fechaCorta(c.pago) : '';
+    $('rGanado').textContent = usd(c.calc);
+    $('rSoles').replaceChildren('Equivale a ', h('b', { text: soles(c.calc * A.tasa) }), ' (TC ' + A.tasa + ')');
+    $('rNeto').replaceChildren('Te llegaría ', h('b', { text: usd(c.neto) }), ' tras la comisión');
+    $('rBarra').style.width = (c.meta > 0 ? Math.min(100, c.calc / c.meta * 100) : 0) + '%';
+    if (document.activeElement !== $('rMeta')) $('rMeta').value = c.meta || '';
+    var frase = $('rFrase');
+    if (!A.tarifaShift && !A.tarifaOpi && !A.tarifaVri) { frase.className = 'frase warn'; frase.textContent = 'Configura tus tarifas en Ajustes (⚙).'; }
+    else if (!(c.meta > 0)) { frase.className = 'frase'; frase.textContent = 'Define una meta para ver tu avance.'; }
+    else if (c.calc >= c.meta) { frase.className = 'frase ok'; frase.textContent = '¡Meta cumplida! +' + usd(c.calc - c.meta); }
+    else {
+      var falta = c.meta - c.calc, dias = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
+      var ritmo = c.calc / hoy.getDate() * dias, shifts = A.tarifaShift > 0 ? Math.ceil(falta / A.tarifaShift) : null;
+      frase.className = 'frase ' + (ritmo >= c.meta ? 'ok' : 'warn');
+      frase.textContent = 'Te faltan ' + usd(falta) + (shifts != null ? ' ≈ ' + shifts + (shifts === 1 ? ' shift' : ' shifts') : '') + (ritmo >= c.meta ? ' · vas a buen ritmo' : '');
+    }
+    var pend = planPendiente(k), conPlan = c.calc + pend * A.tarifaShift;
+    $('rPlan').hidden = !pend;
+    $('rPlan').replaceChildren('Con +' + pend + (pend === 1 ? ' shift planeado: ' : ' shifts planeados: '), h('b', { text: usd(conPlan) }), c.meta > 0 && conPlan >= c.meta ? ' ✓ meta' : '');
+    tipos($('rTipos'), c);
+
+    // Cobros: ciclos ya cerrados que aún no se cobran, y el último cobrado
+    var ul = $('rCobros'); ul.replaceChildren();
+    var pend = [], ultimo = null;
+    for (var i = 1; i <= 12; i++) {
+      var x = ciclo(claveMes(new Date(hoy.getFullYear(), hoy.getMonth() - i, 1)));
+      if (x.estado === 'pendiente' || x.estado === 'atrasado') pend.push(x);
+      else if (x.estado === 'cobrado' && !ultimo) ultimo = x;
+    }
+    pend.reverse().concat(ultimo ? [ultimo] : []).forEach(function (x) {
+      ul.appendChild(h('li', { style: 'cursor:pointer', onclick: function () { abrirCiclo(x.k); } },
+        h('div', { class: 'd', style: 'flex-direction:column;align-items:flex-start;gap:0' }, h('b', { text: nombreCiclo(x.k).slice(0, 3) + ' ' + x.k.slice(0, 4) }), h('small', { text: 'Pago ' + fechaCorta(x.pago) })),
+        h('div', { class: 'der' }, h('span', { class: 'num', text: usd(x.pagado != null ? x.pagado : x.calc) }), estadoEl(x.estado))));
+    });
+    if (!ul.children.length) ul.appendChild(h('li', null, h('p', { class: 'vacio', text: 'No tienes cobros pendientes.' })));
+
+    var deHoy = D.registros.filter(function (r) { return r.fecha === ymd(hoy); });
+    lista($('rHoy'), deHoy, false, 'Aún no trabajas hoy.');
+    $('rHoyTotal').textContent = usd(deHoy.reduce(function (s, r) { return s + monto(r); }, 0));
+  }
+
+  function renderTrabajo() {
+    var ac = activo();
+    $('goShift').textContent = usd(A.tarifaShift) + '/h · por segundo';
+    $('goOpi').textContent = usd(A.tarifaOpi) + '/h · por minuto';
+    $('goVri').textContent = usd(A.tarifaVri) + '/h · por minuto';
+    document.querySelectorAll('[data-iniciar]').forEach(function (b) { b.disabled = !!ac; });
+    lista($('tHoy'), D.registros.filter(function (r) { return r.fecha === ymd(new Date()); }), true, 'Pulsa Shift o Freelance cuando empieces.');
+  }
+
+  function renderActivo() {
+    var r = activo(), box = $('activo');
+    box.hidden = !r;
+    if (!r) return;
+    var esShift = r.tipo === 'shift', s = segCorridos(r, Date.now()), p = pausado(r);
+    box.style.setProperty('--c', esShift ? 'var(--shift)' : 'var(--free)');
+    box.classList.toggle('pausado', p);
+    var conBloque = esShift && r.bloque != null, finBloque = conBloque ? r.bloque + SHIFT_SEG * 1000 : 0, tarde = conBloque ? Math.floor((r.inicio - r.bloque) / 60000) : 0;
+    $('acTitulo').textContent = (conBloque ? 'Shift ' + pad(new Date(r.bloque).getHours()) + ':00' : nombreReg(r)) + (p ? ' · en pausa' : ' en curso') + ' · ' + usd(monto(r));
+    $('acReloj').textContent = reloj(s);
+    var nota = $('acNota'), falta = conBloque ? 'faltan ' + reloj(Math.max(0, (finBloque - Date.now()) / 1000)) : '';
+    if (tarde > 0) { nota.className = 'alerta'; nota.textContent = 'Entraste ' + tarde + ' min tarde · ' + falta; }
+    else if (r.continua) { nota.className = ''; nota.textContent = 'Sigue del shift anterior · ' + falta; }
+    else if (!esShift && s >= AVISO_FREE_SEG) { nota.className = 'alerta'; nota.textContent = '¿Olvidaste detenerlo? Lleva más de 2 horas.'; }
+    else { nota.className = ''; nota.textContent = conBloque ? 'Termina a las ' + pad(new Date(finBloque).getHours()) + ':00 · ' + falta : esShift ? 'Se cobra cada segundo' : 'Se cobran los minutos completos'; }
+    var ctrl = $('acCtrl');
+    if (ctrl.dataset.k !== r.id + p) {
+      ctrl.dataset.k = r.id + p;
+      ctrl.replaceChildren();
+      if (esShift) ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: p ? '▶ Reanudar' : '⏸ Pausar', onclick: alternarPausa }));
+      ctrl.appendChild(h('button', { class: 'btn primary', type: 'button', text: '■ Terminar', onclick: terminar }));
+      if (r.continua) {
+        ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: '→ OPI', title: 'Era una llamada Freelance OPI', onclick: pasarAFree.bind(null, 'opi') }));
+        ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: '→ VRI', title: 'Era una llamada Freelance VRI', onclick: pasarAFree.bind(null, 'vri') }));
+      }
+    }
+  }
+
+  function renderHistorial() {
+    $('hMes').textContent = nombreCiclo(ui.mes).slice(0, 3) + ' ' + ui.mes.slice(0, 4);
+    var c = ciclo(ui.mes);
+    tipos($('hTipos'), c);
+    lista($('hLista'), c.regs, true, 'No hay registros en este mes.');
+  }
+
+  function renderAnio() {
+    $('aAnio').textContent = ui.anio;
+    var tb = $('aFilas'), tot = { calc: 0, pag: 0, com: 0, neto: 0 };
+    tb.replaceChildren();
+    for (var m = 1; m <= 12; m++) {
+      var c = ciclo(ui.anio + '-' + pad(m)), dif = c.pagado != null ? c.pagado - c.calc : null;
+      tot.calc += c.calc; tot.pag += c.pagado || 0; tot.com += c.com; tot.neto += c.neto;
+      tb.appendChild(h('tr', { onclick: abrirCiclo.bind(null, c.k) },
+        h('td', { text: MESES[m - 1] }),
+        h('td', { class: 'num', text: usd(c.calc) }),
+        h('td', { class: 'num tn col-pag', text: c.pagado != null ? usd(c.pagado) : '—' }),
+        h('td', { class: 'num', style: dif == null ? '' : 'color:var(' + (dif < 0 ? '--danger' : '--ok') + ')', text: dif == null ? '—' : (dif > 0 ? '+' : '') + usd(dif) }),
+        h('td', { class: 'num', text: c.com ? '−' + usd(c.com) : '—' }),
+        h('td', { class: 'num tn col-neto', text: usd(c.neto) }),
+        h('td', { class: 'num', text: soles(c.neto * A.tasa) }),
+        h('td', { class: 'num', text: fechaCorta(c.pago) }),
+        h('td', null, estadoEl(c.estado))));
+    }
+    $('aTotal').replaceChildren(h('tr', null, h('td', { text: 'Total' }), h('td', { class: 'num', text: usd(tot.calc) }),
+      h('td', { class: 'num tn col-pag', text: usd(tot.pag) }), h('td'), h('td', { class: 'num', text: tot.com ? '−' + usd(tot.com) : '—' }),
+      h('td', { class: 'num tn col-neto', text: usd(tot.neto) }), h('td', { class: 'num', text: soles(tot.neto * A.tasa) }), h('td'), h('td')));
+  }
+
+  // ---------- Cronómetro ----------
+  // clase: 'shift', 'opi' o 'vri' (freelance por teléfono o por video)
+  function iniciar(clase) {
+    if (activo()) return;
+    var tarifa = tarifaDe(clase), tipo = clase === 'shift' ? 'shift' : 'freelance';
+    cambiar(NOMBRE[clase] + ' iniciado.', function () {
+      var ahora = Date.now();
+      D.registros.push({ id: 'r' + ahora, tipo: tipo, modo: tipo === 'freelance' ? clase : undefined, bloque: tipo === 'shift' ? inicioHora(ahora) : undefined,
+        fecha: ymd(new Date()), inicio: ahora, pausas: [], fin: null, seg: null, tarifa: tarifa });
+    });
+    if (!tarifa) avisar('Ojo: la tarifa de ' + NOMBRE[clase] + ' está en $0. Puedes cambiarla en Ajustes.');
+  }
+  function alternarPausa() {
+    var r = activo(); if (!r) return;
+    var p = pausado(r);
+    cambiar(p ? 'Shift reanudado.' : 'Shift en pausa.', function () {
+      if (p) r.pausas[r.pausas.length - 1].h = Date.now(); else r.pausas.push({ d: Date.now(), h: null });
+    });
+  }
+  function terminar() {
+    var r = activo(); if (!r) return;
+    var ahora = Date.now(), s = segCorridos(r, ahora);
+    if (r.continua) return abrirSobra(ahora, s); // el sobrante tras el :00: preguntar qué fue
+    cerrarReg(r, ahora, s, null);
+  }
+  // modo: null = queda como está; 'opi' o 'vri' = el sobrante fue una llamada freelance
+  function cerrarReg(r, ahora, s, modo) {
+    var txt = modo ? 'Sobrante guardado como ' + NOMBRE[modo] + ': ' + Math.floor(s / 60) + ' min.'
+      : nombreReg(r) + ' guardado: ' + (r.tipo === 'shift' ? reloj(s) : Math.floor(s / 60) + ' min') + '.';
+    cambiar(txt, function () {
+      if (pausado(r)) r.pausas[r.pausas.length - 1].h = ahora;
+      if (modo) { r.tipo = 'freelance'; r.modo = modo; r.tarifa = tarifaDe(modo); delete r.bloque; delete r.continua; }
+      r.fin = ahora;
+      r.seg = Math.floor(s);
+    });
+  }
+  var sobraPend = null, tipoSobra = 'shift';
+  function ponerSobra(t) {
+    tipoSobra = t;
+    document.querySelectorAll('[data-sobra]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.sobra === t); });
+    var s = sobraPend.s, min = Math.floor(s / 60);
+    $('psValor').replaceChildren(t === 'shift' ? 'Como shift (cada segundo): ' : 'Como ' + NOMBRE[t] + ' (' + min + ' min): ',
+      h('b', { text: usd(t === 'shift' ? s / 3600 * A.tarifaShift : min / 60 * tarifaDe(t)) }));
+  }
+  function abrirSobra(ahora, s) {
+    var r = activo();
+    sobraPend = { ahora: ahora, s: s };
+    $('psTexto').replaceChildren('Te pasaste ', h('b', { text: reloj(s) }), ' del shift de las ' + pad(new Date(r.bloque - 3600e3).getHours()) + ':00.');
+    ponerSobra('shift');
+    abrir($('popSobra'));
+  }
+  document.querySelectorAll('[data-sobra]').forEach(function (b) { b.addEventListener('click', function () { ponerSobra(b.dataset.sobra); }); });
+  $('fSobra').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var r = activo(), p = sobraPend;
+    cerrar(); sobraPend = null;
+    if (r && p) cerrarReg(r, p.ahora, p.s, tipoSobra === 'shift' ? null : tipoSobra);
+  });
+  // Un shift es un bloque de reloj (:00 a :00). Al llegar al :00 se cierra solo y, si seguías trabajando,
+  // continúa con el bloque siguiente. Si el cronómetro estaba en pausa, o pasó más de 1 h sin abrir la app, no continúa.
+  function rodar() {
+    var r = activo();
+    if (!r || r.tipo !== 'shift' || r.bloque == null) return;
+    var fin = r.bloque + SHIFT_SEG * 1000, ahora = Date.now();
+    if (ahora < fin) return;
+    var p = pausado(r), seguir = !p && ahora < fin + SHIFT_SEG * 1000, hora = pad(new Date(fin).getHours()) + ':00';
+    if (p) r.pausas[r.pausas.length - 1].h = Math.max(r.pausas[r.pausas.length - 1].d, fin);
+    r.fin = fin;
+    r.seg = Math.floor(segCorridos(r, fin));
+    if (seguir) D.registros.push({ id: 'r' + fin, tipo: 'shift', fecha: ymd(new Date(fin)), inicio: fin, bloque: fin, continua: true, pausas: [], fin: null, seg: null, tarifa: A.tarifaShift });
+    guardar(); render();
+    avisar(seguir ? 'Shift cerrado a las ' + hora + '. Sigues en el shift de las ' + hora + '.' : 'Shift cerrado a las ' + hora + (p ? ' (estaba en pausa).' : '. ¿Olvidaste detenerlo?'));
+  }
+  // El tiempo que siguió tras el :00 era una llamada freelance: se convierte, conservando la hora de inicio
+  function pasarAFree(modo) {
+    var r = activo(); if (!r) return;
+    cambiar('Pasado a ' + NOMBRE[modo] + '.', function () {
+      if (pausado(r)) r.pausas[r.pausas.length - 1].h = Date.now();
+      r.tipo = 'freelance'; r.modo = modo; r.tarifa = tarifaDe(modo);
+      delete r.bloque; delete r.continua;
+    });
+  }
+  setInterval(function () { if (activo()) { rodar(); renderActivo(); } }, 1000);
+
+  // ---------- Registros: manual, editar, borrar ----------
+  var editando = null, tipoForm = 'shift';
+  function ponerTipo(t) {
+    tipoForm = t;
+    document.querySelectorAll('[data-tipo]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tipo === t); });
+    $('frSegCampo').hidden = t !== 'shift';
+    $('frNota').textContent = t === 'shift' ? 'Máximo 60 minutos. Se cobra cada segundo.' : 'Se cobran solo los minutos completos.';
+  }
+  function abrirReg(r) {
+    editando = r || null;
+    $('prTitulo').textContent = r ? 'Editar registro' : 'Registro manual';
+    ponerTipo(r ? claseDe(r) : 'shift');
+    $('frFecha').value = r ? r.fecha : ymd(new Date());
+    $('frMin').value = r ? Math.floor(r.seg / 60) : '';
+    $('frSeg').value = r ? Math.floor(r.seg % 60) : '';
+    $('frMsg').textContent = '';
+    abrir($('popReg'));
+    $('frMin').focus();
+  }
+  document.querySelectorAll('[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { ponerTipo(b.dataset.tipo); }); });
+  document.querySelectorAll('[data-nuevo]').forEach(function (b) { b.addEventListener('click', function () { abrirReg(null); }); });
+  $('fReg').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var f = $('frFecha').value, mi = num($('frMin').value) || 0, se = tipoForm === 'shift' ? (num($('frSeg').value) || 0) : 0;
+    var seg = Math.floor(mi) * 60 + Math.floor(se);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(f)) return void ($('frMsg').textContent = 'Elige una fecha.');
+    if (se > 59) return void ($('frMsg').textContent = 'Los segundos van de 0 a 59.');
+    if (!seg) return void ($('frMsg').textContent = 'Escribe cuánto duró.');
+    if (tipoForm === 'shift' && seg > SHIFT_SEG) return void ($('frMsg').textContent = 'Un shift dura como máximo 60 minutos.');
+    var r = editando;
+    cerrar();
+    cambiar(r ? 'Registro actualizado.' : 'Registro agregado.', function () {
+      var tipo = tipoForm === 'shift' ? 'shift' : 'freelance', modo = tipo === 'freelance' ? tipoForm : undefined;
+      if (r) {
+        if (claseDe(r) !== tipoForm) r.tarifa = tarifaDe(tipoForm); // solo si cambia el tipo se toma la tarifa actual
+        r.tipo = tipo; r.modo = modo; r.seg = seg;
+        if (r.fecha !== f) { r.fecha = f; r.inicio = deYmd(f).getTime() + 12 * 3600e3; r.manual = true; }
+      } else {
+        D.registros.push({ id: 'r' + Date.now(), tipo: tipo, modo: modo, fecha: f, inicio: deYmd(f).getTime() + 12 * 3600e3, pausas: [], fin: deYmd(f).getTime() + 12 * 3600e3, seg: seg, manual: true,
+          tarifa: tarifaDe(tipoForm) });
+      }
+    });
+  });
+  // Primer clic arma el botón; el segundo borra (con Deshacer)
+  function borrarReg(r, btn) {
+    if (!btn.hasAttribute('data-armado')) {
+      btn.setAttribute('data-armado', ''); btn.textContent = '¿Borrar?';
+      setTimeout(function () { if (btn.isConnected) { btn.removeAttribute('data-armado'); btn.textContent = 'Borrar'; } }, 4000);
+      return;
+    }
+    cambiar('Registro borrado.', function () { D.registros = D.registros.filter(function (x) { return x !== r; }); });
+  }
+
+  // ---------- Ciclo ----------
+  var cicloAbierto = null;
+  function abrirCiclo(k) {
+    var c = ciclo(k);
+    cicloAbierto = k;
+    $('pcTitulo').textContent = nombreCiclo(k);
+    $('pcCalc').textContent = 'Calculado por Lolito: ' + usd(c.calc);
+    $('pcPagado').value = c.pagado != null ? c.pagado : '';
+    $('pcPago').value = c.pago;
+    $('pcMeta').value = c.meta || '';
+    vistaNeto();
+    abrir($('popCiclo'));
+  }
+  function vistaNeto() {
+    var p = num($('pcPagado').value), base = p != null && $('pcPagado').value !== '' ? p : ciclo(cicloAbierto).calc, com = comision(base);
+    $('pcNeto').textContent = 'Comisión ' + usd(com) + ' → te llega ' + usd(Math.max(0, base - com)) + ' ≈ ' + soles(Math.max(0, base - com) * A.tasa);
+  }
+  $('pcPagado').addEventListener('input', vistaNeto);
+  $('fCiclo').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var k = cicloAbierto, pagado = $('pcPagado').value === '' ? null : num($('pcPagado').value), pago = $('pcPago').value, meta = num($('pcMeta').value);
+    cerrar();
+    cambiar(nombreCiclo(k) + ' actualizado.', function () {
+      var c = D.ciclos[k] = D.ciclos[k] || {};
+      c.pagado = pagado;
+      c.pago = pago && pago !== CRONOGRAMA[k] ? pago : undefined;
+      c.meta = meta != null && meta !== A.meta ? meta : undefined;
+    });
+  });
+  $('rMeta').addEventListener('change', function () {
+    var k = claveMes(new Date()), meta = num(this.value);
+    cambiar('Meta de ' + nombreCiclo(k) + ' actualizada.', function () { (D.ciclos[k] = D.ciclos[k] || {}).meta = meta != null ? meta : undefined; });
+  });
+
+  // ---------- Ajustes ----------
+  $('btnAjustes').addEventListener('click', function () {
+    $('aaShift').value = A.tarifaShift || ''; $('aaOpi').value = A.tarifaOpi || ''; $('aaVri').value = A.tarifaVri || '';
+    $('aaPct').value = A.comPct || ''; $('aaFijo').value = A.comFijo || ''; $('aaMeta').value = A.meta || '';
+    $('aaAjuste').value = A.ajusteTc;
+    $('aaTc').textContent = 'Tipo de cambio hoy: ' + A.tasa + '. ' + descTasa() + ' También se edita arriba, junto a “TC”.';
+    abrir($('popAjustes'));
+  });
+  $('fAjustes').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var v = { tarifaShift: num($('aaShift').value) || 0, tarifaOpi: num($('aaOpi').value) || 0, tarifaVri: num($('aaVri').value) || 0, comPct: num($('aaPct').value) || 0, comFijo: num($('aaFijo').value) || 0, meta: num($('aaMeta').value) || 0, ajusteTc: num($('aaAjuste').value) || 0 };
+    cerrar();
+    cambiar('Ajustes guardados.', function () {
+      Object.assign(A, v);
+      if (!A.tasaManual && A.tasaFuente === 'sunat') A.tasa = r4(A.tasaBase + A.ajusteTc); // el nuevo ajuste se aplica al TC de hoy
+    });
+  });
+  $('tc').addEventListener('change', function () {
+    var v = num(this.value);
+    if (!v) { this.value = A.tasa; return; }
+    cambiar('Tipo de cambio: ' + v + '.', function () { A.tasa = v; A.tasaManual = true; });
+  });
+  // Tipo de cambio automático: SUNAT compra (dolar.pe) + un ajuste editable hacia el paralelo.
+  // Si dolar.pe no responde, usa el de mercado sin ajuste. Si lo editaste a mano, se respeta hasta que pulses ↻.
+  function r4(n) { return Math.round(n * 10000) / 10000; }
+  function traerTasa(forzar) {
+    if (!forzar && (A.tasaManual || A.tasaFecha === ymd(new Date()))) return;
+    function json(url) { return fetch(url, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+    function fijar(base, fuente) {
+      var v = r4(fuente === 'sunat' ? base + A.ajusteTc : base);
+      cambiar(forzar ? 'Tipo de cambio del día: ' + v + '.' : '', function () { A.tasa = v; A.tasaBase = base; A.tasaFuente = fuente; A.tasaManual = false; A.tasaFecha = ymd(new Date()); });
+    }
+    json('https://dolar.pe/api/public/series?pair=USD-PEN').then(function (j) {
+      var d = j.series['USD-PEN'].data, base = d[d.length - 1];
+      if (!(base > 0)) throw new Error('sin tasa');
+      fijar(r4(base), 'sunat');
+    }).catch(function () {
+      return json('https://open.er-api.com/v6/latest/USD').then(function (j) {
+        if (!(j.rates && j.rates.PEN > 0)) throw new Error('sin tasa');
+        fijar(r4(j.rates.PEN), 'mercado');
+      });
+    }).catch(function () { if (forzar) avisar('No se pudo traer el tipo de cambio. Revisa tu conexión.'); });
+  }
+  function descTasa() {
+    if (A.tasaManual) return 'Editado por ti. ↻ trae el del día.';
+    if (A.tasaFuente === 'sunat') return 'SUNAT compra ' + A.tasaBase + ' + ' + A.ajusteTc + ' de ajuste al paralelo (' + fechaCorta(A.tasaFecha) + ').';
+    return 'De mercado (' + fechaCorta(A.tasaFecha) + ').';
+  }
+  $('tcAuto').addEventListener('click', function () { traerTasa(true); });
+
+  // ---------- Copia de seguridad ----------
+  function descargarCopia() {
+    var a = h('a', { href: URL.createObjectURL(new Blob([JSON.stringify(D, null, 2)], { type: 'application/json' })), download: 'copia-lolito-' + ymd(new Date()) + '.json' });
+    a.click(); URL.revokeObjectURL(a.href);
+  }
+  $('btnCopia').addEventListener('click', descargarCopia);
+  $('btnRestaurar').addEventListener('click', function () { $('fCopia').click(); });
+  $('fCopia').addEventListener('change', function (ev) {
+    var f = ev.target.files[0]; ev.target.value = '';
+    if (!f) return;
+    f.text().then(function (t) {
+      var d = JSON.parse(t);
+      if (!Array.isArray(d.registros) || !d.ajustes || !d.ciclos) throw new Error('copia');
+      if (!confirm('¿Restaurar esta copia con ' + d.registros.length + ' registros? Reemplazará lo que tienes ahora.')) return;
+      if (prompt('Para confirmar, escribe RESTAURAR. Antes se descargará una copia de lo que tienes ahora.') !== 'RESTAURAR') return;
+      descargarCopia();
+      cerrar();
+      cambiar('Copia restaurada.', function () { usar(d); });
+    }).catch(function () { avisar('No se pudo restaurar: revisa que sea una copia de Lolito.'); });
+  });
+
+  // ---------- Ventanas y avisos ----------
+  var popAbierto = null;
+  function abrir(pop) { cerrar(); popAbierto = pop; pop.hidden = false; $('velo').hidden = false; }
+  function cerrar() { if (popAbierto) popAbierto.hidden = true; popAbierto = null; $('velo').hidden = true; }
+  $('velo').addEventListener('click', cerrar);
+  document.querySelectorAll('.pop-cerrar, [data-cerrar]').forEach(function (b) { b.addEventListener('click', cerrar); });
+  addEventListener('keydown', function (ev) { if (ev.key === 'Escape') cerrar(); });
+  function arrastrable(pop) {
+    var head = pop.querySelector('.pop-head');
+    head.addEventListener('pointerdown', function (ev) {
+      if (ev.target.closest('button') || matchMedia('(max-width: 820px)').matches) return;
+      var r = pop.getBoundingClientRect(), dx = ev.clientX - r.left, dy = ev.clientY - r.top;
+      function mover(e) {
+        pop.style.left = Math.max(0, Math.min(innerWidth - r.width, e.clientX - dx)) + 'px';
+        pop.style.top = Math.max(0, Math.min(innerHeight - 48, e.clientY - dy)) + 'px';
+        pop.style.right = 'auto';
+      }
+      function soltar() { removeEventListener('pointermove', mover); removeEventListener('pointerup', soltar); }
+      addEventListener('pointermove', mover); addEventListener('pointerup', soltar);
+    });
+  }
+  document.querySelectorAll('.pop').forEach(arrastrable);
+  var deshacer = null, avisoT;
+  function cerrarAviso() { clearTimeout(avisoT); deshacer = null; $('avisoD').hidden = true; }
+  function avisar(txt, fn) {
+    clearTimeout(avisoT);
+    deshacer = fn || null;
+    $('avisoBtn').hidden = !fn;
+    $('avisoTxt').textContent = txt;
+    $('avisoD').hidden = false;
+    avisoT = setTimeout(cerrarAviso, 8000);
+  }
+  $('avisoBtn').addEventListener('click', function () { var fn = deshacer; cerrarAviso(); if (fn) fn(); });
+
+  // ---------- Modo claro / oscuro (se recuerda en este navegador) ----------
+  $('btnTema').addEventListener('click', function () {
+    var raiz = document.documentElement, actual = raiz.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var nuevo = actual === 'dark' ? 'light' : 'dark';
+    raiz.setAttribute('data-theme', nuevo);
+    try { localStorage.setItem('lolito.tema', nuevo); } catch (e) {}
+  });
+
+  // ---------- Navegación ----------
+  document.querySelectorAll('.tab').forEach(function (b) {
+    b.addEventListener('click', function () { ui.vista = b.dataset.ir; try { localStorage.setItem('lolito.vista', ui.vista); } catch (e) {} render(); });
+  });
+  document.querySelectorAll('[data-iniciar]').forEach(function (b) { b.addEventListener('click', function () { iniciar(b.dataset.iniciar); }); });
+  function moverSemana(n) { ui.semana = new Date(ui.semana.getFullYear(), ui.semana.getMonth(), ui.semana.getDate() + 7 * n); render(); }
+  $('sAnt').addEventListener('click', function () { moverSemana(-1); });
+  $('sSig').addEventListener('click', function () { moverSemana(1); });
+  $('sHoy').addEventListener('click', function () { ui.semana = lunes(new Date()); render(); });
+  function moverMes(n) { var p = ui.mes.split('-'); ui.mes = claveMes(new Date(+p[0], +p[1] - 1 + n, 1)); render(); }
+  $('hAnt').addEventListener('click', function () { moverMes(-1); });
+  $('hSig').addEventListener('click', function () { moverMes(1); });
+  $('aAnt').addEventListener('click', function () { ui.anio--; render(); });
+  $('aSig').addEventListener('click', function () { ui.anio++; render(); });
+  // Si cambia el día con la app abierta, o vuelves a la pestaña, redibuja
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) return;
+    if (nube) { cargar(); if (!listo) return; } else usar(local.leer() || D);
+    render(); rodar(); traerTasa(false);
+  });
+  $('lForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var email = $('lEmail').value.trim(), pass = $('lPass').value;
+    if (!sb) return;
+    if (!email || !pass) { $('lMsg').textContent = 'Escribe tu correo y contraseña.'; return; }
+    $('lBtn').disabled = true; $('lMsg').textContent = 'Entrando…';
+    sb.auth.signInWithPassword({ email: email, password: pass }).then(function (r) {
+      $('lBtn').disabled = false;
+      $('lMsg').textContent = r.error ? 'Correo o contraseña incorrectos.' : '';
+    }).catch(function () { $('lBtn').disabled = false; $('lMsg').textContent = 'No se pudo conectar. Inténtalo otra vez.'; });
+  });
+  $('btnSalir').hidden = !nube;
+  $('btnSalir').addEventListener('click', function () { cerrar(); if (sb) sb.auth.signOut(); });
+
+  render();
+  if (nube) conectar();
+  else { rodar(); traerTasa(false); }
+})();
+</script>
+</body></html>
