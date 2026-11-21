@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Lolito</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect width='34' height='34' rx='9' fill='%23b4532a'/%3E%3Cpath d='M9 19v-3a8 8 0 0 1 16 0v3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Crect x='7' y='18' width='5' height='7' rx='2' fill='%23fff'/%3E%3Crect x='22' y='18' width='5' height='7' rx='2' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect width='34' height='34' rx='9' fill='%231f3a5f'/%3E%3Cpath d='M9 19v-3a8 8 0 0 1 16 0v3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Crect x='7' y='18' width='5' height='7' rx='2' fill='%23fff'/%3E%3Crect x='22' y='18' width='5' height='7' rx='2' fill='%23fff'/%3E%3C/svg%3E">
 <script>try { var t = localStorage.getItem('lolito.tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 [hidden] { display: none !important; }
 :root {
-  --bg: #efe7f0; --surface: #ffffff; --ink: #1f1a21; --muted: #6a5f6c; --line: #ddd1df;
-  --accent: #b4532a; --accent-ink: #ffffff;
-  --shift: #9b7fe0; --free: #8cc63f;
+  --bg: #e8ecf0; --surface: #ffffff; --ink: #161b22; --muted: #5a6573; --line: #d2d9e1;
+  --accent: #1f3a5f; --accent-ink: #ffffff;
+  --shift: #4f7cac; --free: #3f8f88;
   --ok: #1e7a3c; --warn: #a15c00; --danger: #b3261e;
   --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
@@ -16,14 +16,14 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #17131a; --surface: #221c25; --ink: #f0e9f1; --muted: #a99dab; --line: #3a3140;
-    --accent: #f08a5d; --accent-ink: #2a1206; --shift: #b9a3ff; --free: #b6e36b;
+    --bg: #12161b; --surface: #1b2128; --ink: #e8edf2; --muted: #9aa6b2; --line: #2c3540;
+    --accent: #7fa7d6; --accent-ink: #0d1622; --shift: #7fa3d1; --free: #6cc0b8;
     --ok: #5fd38a; --warn: #ffb74d; --danger: #ff8a80; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #17131a; --surface: #221c25; --ink: #f0e9f1; --muted: #a99dab; --line: #3a3140;
-  --accent: #f08a5d; --accent-ink: #2a1206; --shift: #b9a3ff; --free: #b6e36b;
+  --bg: #12161b; --surface: #1b2128; --ink: #e8edf2; --muted: #9aa6b2; --line: #2c3540;
+  --accent: #7fa7d6; --accent-ink: #0d1622; --shift: #7fa3d1; --free: #6cc0b8;
   --ok: #5fd38a; --warn: #ffb74d; --danger: #ff8a80; color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -32,7 +32,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
 .wrap { max-width: 1080px; margin: 0 auto; padding: 20px 16px 48px; display: flex; flex-direction: column; gap: 20px; }
 h1, h2 { font-family: var(--f-display); margin: 0; }
 h2 { font-size: 18px; font-weight: 700; }
-.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.num, .tc input, .meta-campo input { font-family: var(--f-num); font-variant-numeric: tabular-nums; }
+.num { white-space: nowrap; }
 .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .09em; color: var(--muted); font-weight: 600; white-space: nowrap; }
 .hint { color: var(--muted); font-size: 13px; margin: 0; }
 /* Frases con montos: letra de texto (más amigable que la monoespaciada), cifras alineadas */
@@ -94,8 +95,25 @@ body::before { left: 0; } body::after { right: 0; transform: scaleY(-1); }
 .mini .nombre { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 13px; white-space: nowrap; }
 .mini .num { font-size: 17px; }
 .mini small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.meta-campo { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
-.meta-campo input { width: 96px; border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 5px 8px; font-family: var(--f-num); }
+.meta-campo { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: var(--ink); flex-wrap: wrap; }
+.meta-campo input { width: 140px; border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 6px 10px; font-size: 20px; font-family: var(--f-num); }
+
+/* Avance del ciclo: ventanita flotante, se queda al cambiar de pestaña y se puede mover */
+.flota { position: fixed; right: 24px; bottom: 24px; z-index: 6; width: 230px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.14); overflow: hidden; }
+.flota::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--accent); }
+.flota-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 6px 4px 12px; cursor: move; user-select: none; touch-action: none; }
+.flota-head .eyebrow { overflow: hidden; text-overflow: ellipsis; }
+.flota-head button { border: 0; background: none; color: var(--muted); font-size: 16px; line-height: 1; padding: 4px 8px; border-radius: 6px; }
+.flota-head button:hover { color: var(--ink); background: var(--bg); }
+.flota-cuerpo { padding: 2px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+.flota .fila { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.flota .fila .num { color: var(--ink); font-size: 16px; font-weight: 600; }
+.flota .falta { margin-top: 4px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, var(--c, var(--warn)) 11%, var(--surface)); color: var(--c, var(--warn)); font-size: 13px; font-weight: 600; }
+.flota .falta.ok { --c: var(--ok); }
+.flota .falta .num, .flota .falta .fila { color: inherit; font-size: inherit; }
+.flota .falta > div { white-space: nowrap; }
+.flota.min .flota-cuerpo { display: none; }
+.flota.min .flota-head { padding-bottom: 8px; }
 
 /* Filas y estados */
 .filas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -150,6 +168,8 @@ body::before { left: 0; } body::after { right: 0; transform: scaleY(-1); }
 .slot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
 .slot button { border: 0; background: none; padding: 0 0 0 2px; color: var(--muted); font-size: 15px; line-height: 1; }
 .slot button:hover { color: var(--danger); }
+.slot.clic { cursor: pointer; }
+.slot.clic:hover { border-color: var(--c); }
 .s-ok { --c: var(--ok); } .s-parcial { --c: var(--warn); } .s-no { --c: var(--muted); } .s-futuro { --c: var(--shift); } .s-curso { --c: var(--accent); }
 .slot.t-free { --c: var(--free); }
 .agregar { height: 26px; border: 1px dashed var(--line); background: none; border-radius: 999px; padding: 0 8px; font-size: 12.5px; color: var(--muted); max-width: 100%; }
@@ -189,7 +209,7 @@ tfoot td { font-weight: 700; border-bottom: 0; }
 .campo { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .campo.ancho, .ancho { grid-column: 1 / -1; }
 .campo label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
-.campo input { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 8px 10px; min-height: 40px; width: 100%; min-width: 0; }
+.campo input, .campo select { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 8px 10px; min-height: 40px; width: 100%; min-width: 0; }
 .tipo-sel { display: flex; gap: 6px; }
 .botones { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
 .msg { margin: 0; font-size: 13px; color: var(--danger); }
@@ -222,6 +242,7 @@ tfoot td { font-weight: 700; border-bottom: 0; }
   .pop { top: auto !important; left: 0 !important; right: 0; bottom: 0; width: auto; max-height: 75vh; border-radius: 14px 14px 0 0; padding-bottom: env(safe-area-inset-bottom); }
   .pop-head { cursor: default; }
   .aviso-deshacer { bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .flota { right: 12px; bottom: calc(82px + env(safe-area-inset-bottom)); width: 200px; }
 }
 @media (max-width: 460px) {
   .panel { padding: 14px; }
@@ -331,7 +352,8 @@ tfoot td { font-weight: 700; border-bottom: 0; }
       <div><p class="hint sub" id="sResumen"></p><p class="hint sub" id="sGanado"></p><p class="hint sub" id="sProy"></p></div>
       <div class="sem-fila sem-cab"><span></span><span class="cab-col t-plan"><span class="eyebrow">Planeado</span><b class="num" id="sCabPlan"></b></span><span class="cab-col t-real"><span class="eyebrow">Real</span><b class="num" id="sCabReal"></b></span></div>
       <ul class="semana" id="sDias"></ul>
-      <p class="leyenda"><span class="slot s-ok">Cumplido</span><span class="slot s-parcial">Parcial</span><span class="slot s-no">No hecho</span><span class="slot s-futuro">Por venir</span></p>
+      <p class="leyenda"><span class="slot s-ok">✓ Cumplido</span><span class="slot s-parcial">Parcial</span><span class="slot s-no">No hecho</span><span class="slot s-futuro">Por venir</span></p>
+      <p class="hint">Toca un shift planeado que ya pasó para anotar lo real con su minuto de ingreso, o uno real para corregirlo.</p>
     </section>
   </main>
 
@@ -362,6 +384,16 @@ tfoot td { font-weight: 700; border-bottom: 0; }
 
 </div>
 
+<aside class="flota" id="flota" aria-label="Avance del ciclo">
+  <div class="flota-head"><span class="eyebrow" id="flTitulo"></span><button type="button" id="flMin" aria-label="Minimizar">–</button></div>
+  <div class="flota-cuerpo">
+    <div class="fila">Llevas <span class="num" id="flGanado"></span></div>
+    <div class="fila">Shifts hechos <span class="num" id="flShifts"></span></div>
+    <div class="fila">Meta <span class="num" id="flMeta"></span></div>
+    <div class="falta" id="flFalta"></div>
+  </div>
+</aside>
+
 <div class="velo" id="velo" hidden></div>
 
 <div class="pop" id="popReg" role="dialog" aria-labelledby="prTitulo" hidden>
@@ -369,15 +401,26 @@ tfoot td { font-weight: 700; border-bottom: 0; }
   <form id="fReg" novalidate>
     <div class="campo ancho"><label>Tipo</label><div class="tipo-sel"><button class="chip" type="button" data-tipo="shift">Shift</button><button class="chip" type="button" data-tipo="opi">Freelance OPI</button><button class="chip" type="button" data-tipo="vri">Freelance VRI</button></div></div>
     <div class="campo ancho"><label for="frFecha">Fecha</label><input id="frFecha" type="date"></div>
-    <div class="campo"><label for="frMin">Minutos</label><input id="frMin" type="number" min="0" step="1" inputmode="numeric"></div>
-    <div class="campo" id="frSegCampo"><label for="frSeg">Segundos</label><input id="frSeg" type="number" min="0" max="59" step="1" inputmode="numeric"></div>
+    <div class="campo" id="frBloqueCampo"><label for="frBloque">Shift</label><select id="frBloque"></select></div>
+    <div class="campo" id="frIngresoCampo"><label for="frIngreso">Ingreso</label><input id="frIngreso" type="time"></div>
+    <div class="campo" id="frMinCampo"><label for="frMin">Minutos</label><input id="frMin" type="number" min="0" step="1" inputmode="numeric"></div>
     <p class="hint ancho" id="frNota"></p>
     <p class="msg ancho" id="frMsg" role="status"></p>
     <div class="botones ancho"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn primary">Guardar</button></div>
   </form>
 </div>
 
-<div class="pop" id="popSobra" role="dialog" aria-labelledby="psTitulo" hidden>
+<div class="pop" id="popIngreso" role="dialog" aria-labelledby="piTitulo" hidden>
+  <div class="pop-head"><h2 id="piTitulo">Hora de ingreso</h2><button class="pop-cerrar" type="button" aria-label="Cerrar">×</button></div>
+  <form id="fIngreso" novalidate>
+    <p class="hint ancho" id="piNota"></p>
+    <div class="campo ancho"><label for="piHora">Ingresé a las</label><input id="piHora" type="time"></div>
+    <p class="msg ancho" id="piMsg" role="status"></p>
+    <div class="botones ancho"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn primary">Guardar</button></div>
+  </form>
+</div>
+
+<div class="pop" id="popSobra"role="dialog" aria-labelledby="psTitulo" hidden>
   <div class="pop-head"><h2 id="psTitulo">¿Qué fue el sobrante?</h2><button class="pop-cerrar" type="button" aria-label="Cerrar">×</button></div>
   <form id="fSobra" novalidate>
     <p class="hint ancho sub" id="psTexto"></p>
@@ -655,17 +698,20 @@ tfoot td { font-weight: 700; border-bottom: 0; }
     document.querySelectorAll('.vista').forEach(function (v) { v.hidden = v.dataset.vista !== ui.vista; });
     if (document.activeElement !== $('tc')) $('tc').value = A.tasa;
     $('tcLabel').title = 'Tipo de cambio: ' + descTasa();
-    renderActivo(); renderResumen(); renderTrabajo(); renderSemana(); renderHistorial(); renderAnio();
+    renderActivo(); renderResumen(); renderTrabajo(); renderSemana(); renderHistorial(); renderAnio(); renderFlota();
   }
 
   // ---------- Plan de la semana ----------
   function inicioSlot(fecha, hora) { return deYmd(fecha).getTime() + hora * 3600e3; }
   // Un shift planeado se cumple con el shift real de ese mismo bloque de reloj (:00 a :00)
+  function regSlot(fecha, hora) {
+    var ini = inicioSlot(fecha, hora);
+    return D.registros.find(function (x) { return x.tipo === 'shift' && (x.bloque != null ? x.bloque === ini : x.inicio >= ini && x.inicio < ini + 3600e3); }) || null;
+  }
   function estadoSlot(fecha, hora) {
-    var ini = inicioSlot(fecha, hora), ahora = Date.now();
-    var r = D.registros.find(function (x) { return x.tipo === 'shift' && (x.bloque != null ? x.bloque === ini : x.inicio >= ini && x.inicio < ini + 3600e3); });
+    var ini = inicioSlot(fecha, hora), r = regSlot(fecha, hora);
     if (r) return r.fin == null ? 'curso' : r.seg >= 3540 ? 'ok' : 'parcial';
-    return ini + 3600e3 <= ahora ? 'no' : 'futuro';
+    return ini + 3600e3 <= Date.now() ? 'no' : 'futuro';
   }
   // Shifts planeados que aún no empiezan, dentro de un ciclo (mes)
   function planPendiente(k) {
@@ -684,8 +730,11 @@ tfoot td { font-weight: 700; border-bottom: 0; }
       var d = new Date(ini.getFullYear(), ini.getMonth(), ini.getDate() + i), f = ymd(d), horas = (D.plan[f] || []).slice().sort(function (a, b) { return a - b; });
       var regs = D.registros.filter(function (r) { return r.fecha === f; }).sort(function (a, b) { return a.inicio - b.inicio; });
       var pl = h('div', { class: 'slots' }), re = h('div', { class: 'slots' });
+      // Toca un shift planeado ya pasado para anotar (o corregir) lo real, con su minuto de ingreso
       horas.forEach(function (hr) {
-        var e = estadoSlot(f, hr), chip = h('span', { class: 'slot s-' + e }, pad(hr) + ':00');
+        var e = estadoSlot(f, hr), r = regSlot(f, hr), clic = e === 'no' || e === 'ok' || e === 'parcial';
+        var chip = h('span', { class: 'slot s-' + e + (clic ? ' clic' : ''), title: e === 'no' ? 'Anotar lo que trabajaste' : clic ? 'Corregir lo real' : '',
+          onclick: clic ? abrirReg.bind(null, r, { f: f, hr: hr }) : null }, (e === 'ok' ? '✓ ' : '') + pad(hr) + ':00');
         plan++; if (e === 'ok') cumplidos++;
         chip.appendChild(h('button', { type: 'button', 'aria-label': 'Quitar shift de las ' + hr + ':00', text: '×', onclick: quitarSlot.bind(null, f, hr) }));
         pl.appendChild(chip);
@@ -697,10 +746,14 @@ tfoot td { font-weight: 700; border-bottom: 0; }
         for (var hr = 0; hr < 24; hr++) if (horas.indexOf(hr) < 0) sel.appendChild(h('option', { value: hr, text: pad(hr) + ':00' }));
         pl.appendChild(sel);
       }
+      // Real: cada shift con su minuto exacto de ingreso; en verde y con ✓ si cumplió un shift planeado
       regs.forEach(function (r) {
-        var t = new Date(r.inicio), txt = r.fin == null ? 'ahora' : duracion(r);
+        var t = new Date(r.inicio), txt = r.fin == null ? 'ahora' : duracion(r), shift = r.tipo === 'shift';
+        var cumplio = shift && r.fin != null && r.seg >= 3540 && horas.indexOf(new Date(r.bloque != null ? r.bloque : r.inicio).getHours()) >= 0;
         real += monto(r);
-        re.appendChild(h('span', { class: 'slot ' + (r.tipo === 'shift' ? '' : 't-free'), title: nombreReg(r) }, r.tipo === 'shift' ? (r.manual ? '' : pad(t.getHours()) + ':' + pad(t.getMinutes()) + ' · ') + txt : (r.modo ? r.modo.toUpperCase() + ' · ' : '') + txt));
+        re.appendChild(h('span', { class: 'slot' + (shift ? cumplio ? ' s-ok' : '' : ' t-free') + (r.fin != null ? ' clic' : ''), title: nombreReg(r) + (r.fin != null ? ' · toca para corregir' : ''),
+          onclick: r.fin != null ? function () { abrirReg(r); } : null },
+          shift ? (cumplio ? '✓ ' : '') + (r.manual && r.bloque == null ? '' : horaMin(t) + ' · ') + txt : (r.modo ? r.modo.toUpperCase() + ' · ' : '') + txt));
       });
       // Dinero del día: lo planeado (shifts × tarifa) frente a lo real
       var plDia = horas.length * A.tarifaShift, reDia = regs.reduce(function (s, r) { return s + monto(r); }, 0);
@@ -728,7 +781,8 @@ tfoot td { font-weight: 700; border-bottom: 0; }
     if (!isFinite(hr)) return;
     cambiar('Shift planeado: ' + fechaCorta(f) + ', ' + pad(hr) + ':00.', function () { (D.plan[f] = D.plan[f] || []).push(hr); });
   }
-  function quitarSlot(f, hr) {
+  function quitarSlot(f, hr, ev) {
+    if (ev) ev.stopPropagation(); // que no abra el registro del chip
     cambiar('Shift de las ' + pad(hr) + ':00 quitado del plan.', function () {
       D.plan[f] = D.plan[f].filter(function (x) { return x !== hr; });
       if (!D.plan[f].length) delete D.plan[f];
@@ -745,7 +799,7 @@ tfoot td { font-weight: 700; border-bottom: 0; }
       h('div', { class: 'd t-' + (r.tipo === 'shift' ? 'shift' : 'free') }, h('span', { class: 'dot' }),
         h('span', { class: 'reg' },
           h('span', null, r.tipo === 'shift' ? 'Shift' : r.modo ? h('span', null, h('span', { class: 'largo', text: 'Freelance ' }), r.modo.toUpperCase()) : 'Freelance', ' · ', r.fin == null ? h('b', { text: 'en curso' }) : h('b', { class: 'num', text: duracion(r) })),
-          h('small', null, DIAS[d.getDay()] + ' ' + d.getDate() + (r.manual ? ' · manual' : ', ' + pad(inicio.getHours()) + ':' + pad(inicio.getMinutes())),
+          h('small', null, DIAS[d.getDay()] + ' ' + d.getDate() + (r.manual && r.bloque == null ? ' · manual' : ', ' + pad(inicio.getHours()) + ':' + pad(inicio.getMinutes())),
             r.bloque != null && r.inicio - r.bloque >= 60000 ? h('span', { class: 'c-warn', text: ' · tarde ' + Math.floor((r.inicio - r.bloque) / 60000) + ' min' }) : null))),
       der, acciones);
   }
@@ -765,6 +819,29 @@ tfoot td { font-weight: 700; border-bottom: 0; }
     });
   }
 
+  // Cuánto falta para la meta del ciclo, en dólares y en shifts (a la tarifa actual)
+  function faltaMeta(c) {
+    var usdF = Math.max(0, c.meta - c.calc);
+    return { usd: usdF, shifts: A.tarifaShift > 0 ? Math.ceil(usdF / A.tarifaShift - 1e-9) : null };
+  }
+  function textoShifts(n) { return n + (n === 1 ? ' shift' : ' shifts'); }
+
+  function renderFlota() {
+    var k = claveMes(new Date()), c = ciclo(k), f = faltaMeta(c), min = $('flota').classList.contains('min');
+    $('flGanado').textContent = usd(c.calc);
+    $('flShifts').textContent = c.t.shift.n;
+    $('flMeta').textContent = c.meta > 0 ? usd(c.meta) : '—';
+    var falta = $('flFalta'), corto;
+    if (!(c.meta > 0)) { falta.className = 'falta'; falta.textContent = 'Define tu meta en Resumen.'; corto = nombreCiclo(k).split(' ')[0]; }
+    else if (c.calc >= c.meta) { falta.className = 'falta ok'; falta.replaceChildren('¡Meta cumplida! +', h('span', { class: 'num', text: usd(c.calc - c.meta) })); corto = 'Meta cumplida ✓'; }
+    else {
+      falta.className = 'falta';
+      falta.replaceChildren(h('div', { class: 'fila' }, 'Faltan', h('span', { class: 'num', text: usd(f.usd) })), f.shifts != null ? h('div', { text: '≈ ' + textoShifts(f.shifts) + ' más' }) : '');
+      corto = f.shifts != null ? 'Faltan ' + textoShifts(f.shifts) : 'Faltan ' + usd(f.usd);
+    }
+    $('flTitulo').textContent = min ? corto : nombreCiclo(k);
+  }
+
   function renderResumen() {
     var k = claveMes(new Date()), c = ciclo(k), hoy = new Date();
     $('rCiclo').textContent = nombreCiclo(k);
@@ -779,10 +856,10 @@ tfoot td { font-weight: 700; border-bottom: 0; }
     else if (!(c.meta > 0)) { frase.className = 'frase'; frase.textContent = 'Define una meta para ver tu avance.'; }
     else if (c.calc >= c.meta) { frase.className = 'frase ok'; frase.textContent = '¡Meta cumplida! +' + usd(c.calc - c.meta); }
     else {
-      var falta = c.meta - c.calc, dias = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
-      var ritmo = c.calc / hoy.getDate() * dias, shifts = A.tarifaShift > 0 ? Math.ceil(falta / A.tarifaShift) : null;
+      var falta = faltaMeta(c), dias = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
+      var ritmo = c.calc / hoy.getDate() * dias;
       frase.className = 'frase ' + (ritmo >= c.meta ? 'ok' : 'warn');
-      frase.textContent = 'Te faltan ' + usd(falta) + (shifts != null ? ' ≈ ' + shifts + (shifts === 1 ? ' shift' : ' shifts') : '') + (ritmo >= c.meta ? ' · vas a buen ritmo' : '');
+      frase.replaceChildren('Te faltan ', falta.shifts != null ? h('b', { text: textoShifts(falta.shifts) }) : '', (falta.shifts != null ? ' (' + usd(falta.usd) + ')' : usd(falta.usd)) + ' para tu meta' + (ritmo >= c.meta ? ' · vas a buen ritmo' : ''));
     }
     var pend = planPendiente(k), conPlan = c.calc + pend * A.tarifaShift;
     $('rPlan').hidden = !pend;
@@ -839,6 +916,7 @@ tfoot td { font-weight: 700; border-bottom: 0; }
       ctrl.replaceChildren();
       if (esShift) ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: p ? '▶ Reanudar' : '⏸ Pausar', onclick: alternarPausa }));
       ctrl.appendChild(h('button', { class: 'btn primary', type: 'button', text: '■ Terminar', onclick: terminar }));
+      ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: 'Ingreso', title: 'Corregir la hora en que empezaste', onclick: abrirIngreso }));
       if (r.continua) {
         ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: '→ OPI', title: 'Era una llamada Freelance OPI', onclick: pasarAFree.bind(null, 'opi') }));
         ctrl.appendChild(h('button', { class: 'btn', type: 'button', text: '→ VRI', title: 'Era una llamada Freelance VRI', onclick: pasarAFree.bind(null, 'vri') }));
@@ -958,48 +1036,102 @@ tfoot td { font-weight: 700; border-bottom: 0; }
       delete r.bloque; delete r.continua;
     });
   }
-  setInterval(function () { if (activo()) { rodar(); renderActivo(); } }, 1000);
+  // Corregir la hora de ingreso del registro en curso (corriendo o en pausa)
+  function horaMin(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function abrirIngreso() {
+    var r = activo(); if (!r) return;
+    var b = r.tipo === 'shift' && r.bloque != null ? new Date(r.bloque).getHours() : null;
+    $('piNota').textContent = b != null ? 'Shift de ' + pad(b) + ':00 a ' + pad((b + 1) % 24) + ':00. Si entraste tarde, pon la hora real.' : 'Pon la hora real en que empezaste.';
+    $('piHora').value = horaMin(new Date(r.inicio));
+    $('piMsg').textContent = '';
+    abrir($('popIngreso'));
+  }
+  $('fIngreso').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var r = activo(), m = /^(\d{2}):(\d{2})/.exec($('piHora').value);
+    if (!r || !m) return void ($('piMsg').textContent = 'Elige una hora.');
+    var ahora = Date.now(), hoy = new Date(), t = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), +m[1], +m[2]).getTime();
+    if (r.tipo === 'shift' && r.bloque != null) {
+      t = r.bloque + +m[2] * 60000;
+      if (new Date(r.bloque).getHours() !== +m[1]) return void ($('piMsg').textContent = 'Debe estar entre las ' + horaMin(new Date(r.bloque)) + ' y las ' + pad(new Date(r.bloque).getHours()) + ':59.');
+    } else if (t > ahora) t -= 864e5; // la hora es de ayer (pasada la medianoche)
+    var tope = r.pausas.length ? r.pausas[0].d : ahora;
+    if (t > tope) return void ($('piMsg').textContent = r.pausas.length ? 'Debe ser antes de tu primera pausa (' + horaMin(new Date(tope)) + ').' : 'Esa hora aún no llega.');
+    cerrar();
+    cambiar('Ingreso corregido a las ' + horaMin(new Date(t)) + '.', function () { r.inicio = t; r.fecha = ymd(new Date(t)); });
+  });
+
+  setInterval(function () { if (activo()) { rodar(); renderActivo(); renderFlota(); } }, 1000);
 
   // ---------- Registros: manual, editar, borrar ----------
   var editando = null, tipoForm = 'shift';
   function ponerTipo(t) {
     tipoForm = t;
     document.querySelectorAll('[data-tipo]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tipo === t); });
-    $('frSegCampo').hidden = t !== 'shift';
-    $('frNota').textContent = t === 'shift' ? 'Máximo 60 minutos. Se cobra cada segundo.' : 'Se cobran solo los minutos completos.';
+    var esShift = t === 'shift';
+    $('frBloqueCampo').hidden = $('frIngresoCampo').hidden = !esShift;
+    $('frMinCampo').hidden = esShift;
+    notaReg();
   }
-  function abrirReg(r) {
+  for (var hb = 0; hb < 24; hb++) $('frBloque').appendChild(h('option', { value: hb, text: pad(hb) + ':00 – ' + pad((hb + 1) % 24) + ':00' }));
+  // Shift manual: bloque de reloj + hora de ingreso; se cobra desde el ingreso hasta el fin del bloque
+  // (si al editar ya faltaba tiempo al final, por pausas o por salir antes, se respeta)
+  function datosShift() {
+    var f = $('frFecha').value, hr = +$('frBloque').value, m = /^(\d{2}):(\d{2})/.exec($('frIngreso').value);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(f) || !m) return null;
+    var bloque = deYmd(f).getTime() + hr * 3600e3, inicio = bloque + +m[2] * 60000, r = editando;
+    var faltaba = r && r.tipo === 'shift' && r.bloque != null ? Math.max(0, (r.bloque + 3600e3 - r.inicio) / 1000 - r.seg) : 0;
+    return { f: f, hr: hr, horaOk: +m[1] === hr, bloque: bloque, inicio: inicio, fin: bloque + 3600e3, seg: Math.floor(Math.max(0, (bloque + 3600e3 - inicio) / 1000 - faltaba)) };
+  }
+  function notaReg() {
+    if (tipoForm !== 'shift') return void ($('frNota').textContent = 'Se cobran solo los minutos completos.');
+    var d = datosShift();
+    $('frNota').textContent = d && d.horaOk ? 'Se cobra cada segundo: ' + reloj(d.seg) + ' → ' + usd(d.seg / 3600 * (editando && editando.tipo === 'shift' ? editando.tarifa : A.tarifaShift)) + '.' : 'Se cobra cada segundo, desde tu ingreso hasta el fin del bloque.';
+  }
+  $('frBloque').addEventListener('change', function () { $('frIngreso').value = pad(+this.value) + ':00'; notaReg(); });
+  $('frIngreso').addEventListener('input', notaReg);
+  $('frFecha').addEventListener('input', notaReg);
+  // preset: { f, hr } para anotar un shift planeado desde la pestaña Semana
+  function abrirReg(r, preset) {
     editando = r || null;
+    var antes = new Date(inicioHora(Date.now() - 3600e3)); // por defecto, el bloque que acaba de terminar
+    var ini = r ? new Date(r.inicio) : null, hr = r ? new Date(r.bloque != null ? r.bloque : inicioHora(r.inicio)).getHours() : preset ? preset.hr : antes.getHours();
     $('prTitulo').textContent = r ? 'Editar registro' : 'Registro manual';
-    ponerTipo(r ? claseDe(r) : 'shift');
-    $('frFecha').value = r ? r.fecha : ymd(new Date());
+    $('frFecha').value = r ? r.fecha : preset ? preset.f : ymd(antes);
+    $('frBloque').value = hr;
+    $('frIngreso').value = r && r.tipo === 'shift' ? horaMin(ini) : pad(hr) + ':00';
     $('frMin').value = r ? Math.floor(r.seg / 60) : '';
-    $('frSeg').value = r ? Math.floor(r.seg % 60) : '';
     $('frMsg').textContent = '';
+    ponerTipo(r ? claseDe(r) : 'shift');
     abrir($('popReg'));
-    $('frMin').focus();
   }
   document.querySelectorAll('[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { ponerTipo(b.dataset.tipo); }); });
   document.querySelectorAll('[data-nuevo]').forEach(function (b) { b.addEventListener('click', function () { abrirReg(null); }); });
   $('fReg').addEventListener('submit', function (ev) {
     ev.preventDefault();
-    var f = $('frFecha').value, mi = num($('frMin').value) || 0, se = tipoForm === 'shift' ? (num($('frSeg').value) || 0) : 0;
-    var seg = Math.floor(mi) * 60 + Math.floor(se);
+    var f = $('frFecha').value, r = editando, d = null, seg;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(f)) return void ($('frMsg').textContent = 'Elige una fecha.');
-    if (se > 59) return void ($('frMsg').textContent = 'Los segundos van de 0 a 59.');
+    if (tipoForm === 'shift') {
+      d = datosShift();
+      if (!d) return void ($('frMsg').textContent = 'Escribe la hora de ingreso.');
+      if (!d.horaOk) return void ($('frMsg').textContent = 'El ingreso debe estar entre las ' + pad(d.hr) + ':00 y las ' + pad(d.hr) + ':59.');
+      if (d.fin > Date.now()) return void ($('frMsg').textContent = 'Ese shift aún no termina. Para el de ahora usa el botón Shift.');
+      seg = d.seg;
+    } else seg = Math.floor(num($('frMin').value) || 0) * 60;
     if (!seg) return void ($('frMsg').textContent = 'Escribe cuánto duró.');
-    if (tipoForm === 'shift' && seg > SHIFT_SEG) return void ($('frMsg').textContent = 'Un shift dura como máximo 60 minutos.');
-    var r = editando;
     cerrar();
     cambiar(r ? 'Registro actualizado.' : 'Registro agregado.', function () {
       var tipo = tipoForm === 'shift' ? 'shift' : 'freelance', modo = tipo === 'freelance' ? tipoForm : undefined;
-      if (r) {
-        if (claseDe(r) !== tipoForm) r.tarifa = tarifaDe(tipoForm); // solo si cambia el tipo se toma la tarifa actual
-        r.tipo = tipo; r.modo = modo; r.seg = seg;
-        if (r.fecha !== f) { r.fecha = f; r.inicio = deYmd(f).getTime() + 12 * 3600e3; r.manual = true; }
-      } else {
-        D.registros.push({ id: 'r' + Date.now(), tipo: tipo, modo: modo, fecha: f, inicio: deYmd(f).getTime() + 12 * 3600e3, pausas: [], fin: deYmd(f).getTime() + 12 * 3600e3, seg: seg, manual: true,
-          tarifa: tarifaDe(tipoForm) });
+      if (!r) {
+        r = { id: 'r' + Date.now(), fecha: f, inicio: deYmd(f).getTime() + 12 * 3600e3, pausas: [], manual: true, tarifa: tarifaDe(tipoForm) };
+        r.fin = r.inicio;
+        D.registros.push(r);
+      } else if (claseDe(r) !== tipoForm) r.tarifa = tarifaDe(tipoForm); // solo si cambia el tipo se toma la tarifa actual
+      r.tipo = tipo; r.modo = modo; r.seg = seg;
+      if (d) { r.fecha = f; r.bloque = d.bloque; r.inicio = d.inicio; r.fin = d.fin; }
+      else {
+        delete r.bloque;
+        if (r.fecha !== f) { r.fecha = f; r.inicio = r.fin = deYmd(f).getTime() + 12 * 3600e3; r.manual = true; }
       }
     });
   });
@@ -1140,6 +1272,38 @@ tfoot td { font-weight: 700; border-bottom: 0; }
     });
   }
   document.querySelectorAll('.pop').forEach(arrastrable);
+
+  // Ventanita del avance: se arrastra (también con el dedo) y recuerda dónde la dejaste y si está minimizada
+  (function () {
+    var fl = $('flota'), pos = {};
+    try { pos = JSON.parse(localStorage.getItem('lolito.flota')) || {}; } catch (e) {}
+    function guardarPos() { try { localStorage.setItem('lolito.flota', JSON.stringify(pos)); } catch (e) {} }
+    function ubicar() {
+      if (pos.x == null) { fl.style.left = fl.style.top = fl.style.right = fl.style.bottom = ''; return; }
+      var r = fl.getBoundingClientRect();
+      fl.style.left = Math.max(0, Math.min(innerWidth - r.width, pos.x)) + 'px';
+      fl.style.top = Math.max(0, Math.min(innerHeight - r.height, pos.y)) + 'px';
+      fl.style.right = fl.style.bottom = 'auto';
+    }
+    fl.classList.toggle('min', !!pos.min);
+    $('flMin').textContent = pos.min ? '+' : '–';
+    ubicar();
+    addEventListener('resize', ubicar);
+    $('flMin').addEventListener('click', function () {
+      pos.min = !pos.min; guardarPos();
+      fl.classList.toggle('min', pos.min);
+      this.textContent = pos.min ? '+' : '–';
+      this.setAttribute('aria-label', pos.min ? 'Mostrar' : 'Minimizar');
+      renderFlota(); ubicar();
+    });
+    fl.querySelector('.flota-head').addEventListener('pointerdown', function (ev) {
+      if (ev.target.closest('button')) return;
+      var r = fl.getBoundingClientRect(), dx = ev.clientX - r.left, dy = ev.clientY - r.top;
+      function mover(e) { pos.x = e.clientX - dx; pos.y = e.clientY - dy; ubicar(); }
+      function soltar() { removeEventListener('pointermove', mover); removeEventListener('pointerup', soltar); guardarPos(); }
+      addEventListener('pointermove', mover); addEventListener('pointerup', soltar);
+    });
+  })();
   var deshacer = null, avisoT;
   function cerrarAviso() { clearTimeout(avisoT); deshacer = null; $('avisoD').hidden = true; }
   function avisar(txt, fn) {
